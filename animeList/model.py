@@ -1,4 +1,5 @@
 from dataclasses import dataclass
+from database import AnimeDatabase
 import json
 import pymysql.cursors
 
@@ -44,14 +45,8 @@ class Anime:
         }
 
 class Model:
-    def __init__(self, host, user, password, dbname) -> None:
-        self._con = pymysql.connect(
-            host=host,
-            user=user,
-            password=password,
-            database=dbname,
-            cursorclass=pymysql.cursors.DictCursor
-        )
+    def __init__(self, database: AnimeDatabase) -> None:
+        self._con = database.get_connection()
 
 class AnimeModel(Model):
     """This class provide functions for communicating with database"""
@@ -68,7 +63,7 @@ class AnimeModel(Model):
     def get(self, user_id: int, id: int) -> Anime:
         pass
     
-    def get_all(self, user_id: int) -> List[Anime]:
+    def get_all(self, user_id: int) -> list[Anime]:
         pass
     
     def last_modify(self, user_id: int) -> int:
