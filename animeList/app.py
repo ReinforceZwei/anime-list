@@ -13,3 +13,7 @@ db = AnimeDatabase(
 )
 anime = AnimeModel(db)
 user = UserModel(db)
+
+print(user.add('reinforce', 'password'))
+print(user.get_by_name('reinforce'))
+print(user.verify('reinforce', 'password'))
