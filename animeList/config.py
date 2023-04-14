@@ -32,7 +32,7 @@ class AppConfig:
         )
 
     @staticmethod
-    def Load() -> type['AppConfig']:
+    def load() -> type['AppConfig']:
         """Load config from dotenv file, env and app default"""
         return AppConfig(**{
             **asdict(AppConfig.from_default()),
