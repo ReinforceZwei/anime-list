@@ -1,12 +1,13 @@
 import pymysql.cursors
 
-DB_SCHEMA = """
+# Cannot execute multiple query once. Split them into list
+DB_SCHEMA = ["""
 CREATE TABLE IF NOT EXISTS `user` (
   `id` int(5) NOT NULL PRIMARY KEY AUTO_INCREMENT,
   `name` varchar(100) NOT NULL,
   `password` text NOT NULL
-)
-
+) CHARACTER SET = utf8mb4;
+""", """
 CREATE TABLE IF NOT EXISTS `anime` (
   `name` varchar(100) NOT NULL,
   `id` int(5) NOT NULL PRIMARY KEY AUTO_INCREMENT,
@@ -21,8 +22,8 @@ CREATE TABLE IF NOT EXISTS `anime` (
   `remark` varchar(500) DEFAULT NULL,
   `tags` varchar(1000) NOT NULL DEFAULT '[]',
   FOREIGN KEY(`user_id`) REFERENCES `user`(`id`) ON DELETE CASCADE
-)
-"""
+) CHARACTER SET = utf8mb4;
+"""]
 
 class AnimeDatabase:
     """This class initialize database for this application to use"""
@@ -33,15 +34,16 @@ class AnimeDatabase:
             port=port,
             user=user,
             password=password,
-            database=dbname,
             cursorclass=pymysql.cursors.DictCursor
         )
+        self._dbname = dbname
         self._init_schema()
     
     def _init_schema(self):
-        with self._con.cursor() as cursor:
-            cursor.executemany(DB_SCHEMA)
-        self._con.commit()
+        self._con.query("CREATE DATABASE IF NOT EXISTS `{}` CHARACTER SET utf8mb4".format(self._dbname))
+        self._con.select_db(self._dbname)
+        for table in DB_SCHEMA:
+            self._con.query(table)
 
     def get_connection(self) -> type['pymysql.Connection[pymysql.cursors.DictCursor]']:
         return self._con
