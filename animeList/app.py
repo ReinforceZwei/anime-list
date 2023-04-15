@@ -1,5 +1,4 @@
 import flask
-import time
 from config import AppConfig
 from database import AnimeDatabase
 from model import AnimeModel, UserModel
@@ -15,25 +14,17 @@ db = AnimeDatabase(
 anime = AnimeModel(db)
 user = UserModel(db)
 
-input("Press enter to start testing")
+# App routes:
+# GET / -> index
+# GET /get -> Get all anime. Return json
+# GET /get/:id -> Get anime. Return json
+# POST /add -> Add anime. Return nothing
+#   - animeName
+# GET /search[[/:query]?q=] -> Search anime. Return json
+# POST /update/:id -> Update anime. Return nothing
+# GET /mtime -> Get last modify time. Return int
 
-print("Add user (None mean already exist) -", user.add('reinforce', 'password'))
-me = user.get_by_name('reinforce')
-print("Get user -", me)
-print("Verify user password -", user.verify('reinforce', 'password'))
+app = flask.Flask(__name__)
 
-print("Get last modify -", anime.last_modify(me.user_id))
-print("Wait 2 seconds")
-time.sleep(2)
-oshinoko = anime.add(me.user_id, "oshinoko")
-print("Add anime -", oshinoko)
-print("Get last modify -", anime.last_modify(me.user_id))
-print("Wait 2 seconds")
-time.sleep(2)
-print("Update anime -", anime.update(me.user_id, oshinoko.id, {'comment': 'What a great anime'}))
-oshinoko = anime.get(me.user_id, oshinoko.id)
-print("Get oshinoko -", oshinoko)
-print("Update anime -", anime.update(me.user_id, oshinoko.id, {'downloaded': 1, 'watched': 1}))
-oshinoko = anime.get(me.user_id, oshinoko.id)
-print("Get oshinoko -", oshinoko)
-print("Delete oshinoko -", anime.delete(me.user_id, oshinoko.id))
+if __name__ == "__main__":
+    app.run(port = config.port)
