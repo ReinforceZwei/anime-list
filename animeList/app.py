@@ -26,5 +26,13 @@ user = UserModel(db)
 
 app = flask.Flask(__name__)
 
+@app.get('/')
+def index():
+    return flask.render_template('index.html')
+
+@app.get('/get')
+def get():
+    return '?'
+
 if __name__ == "__main__":
     app.run(port = config.port)

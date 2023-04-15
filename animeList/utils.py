@@ -13,3 +13,6 @@ def verify_password(password_raw: str, hash: str) -> bool:
 def timestamp() -> int:
     """Return current timestamp in seconds"""
     return int(time())
+
+def days_to_seconds(days: int) -> int:
+    return days * 86400
