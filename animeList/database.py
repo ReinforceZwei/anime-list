@@ -24,6 +24,12 @@ CREATE TABLE IF NOT EXISTS `anime` (
     `tags` varchar(1000) NOT NULL DEFAULT '[]',
     FOREIGN KEY(`user_id`) REFERENCES `user`(`id`) ON DELETE CASCADE
 ) CHARACTER SET = utf8mb4;
+""","""
+CREATE TABLE IF NOT EXISTS `last_modify` (
+    `user_id` int(5) NOT NULL PRIMARY KEY,
+    `time` int(10) NOT NULL DEFAULT 0,
+    FOREIGN KEY(`user_id`) REFERENCES `user`(`id`) ON DELETE CASCADE
+) CHARACTER SET = utf8mb4;
 """]
 
 class AnimeDatabase:

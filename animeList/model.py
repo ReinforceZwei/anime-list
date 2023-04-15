@@ -1,7 +1,8 @@
+import dataclasses
 from dataclasses import dataclass
 from database import AnimeDatabase
 from log import logger
-from utils import set_password, verify_password
+from utils import set_password, verify_password, timestamp
 import json
 import pymysql.cursors
 
@@ -66,24 +67,74 @@ class Model:
 class AnimeModel(Model):
     """This class provide functions for communicating with database"""
     
-    def add(self, user_id: int, name: str) -> bool:
+    def add(self, user_id: int, name: str) -> Anime | None:
         sql = "INSERT INTO anime(name, user_id) VALUES (%s, %s)"
-        return self._execute(sql, (name, user_id)) is not None
+        result = self._execute(sql, (name, user_id))
+        if result is not None:
+            id = self._con.insert_id()
+            self._update_last_modify(user_id)
+            return self.get(user_id, id)
+        else:
+            return None
     
-    def update(self, user_id: int, id: int, values: dict) -> bool:
-        pass
+    def update(self, user_id: int, id: int, values: dict[str]) -> bool:
+        # Get available fields from Anime class
+        filter_field = ['id', 'user_id']
+        fields_name = [x.name for x in dataclasses.fields(Anime) if x.name not in filter_field]
+        fields_type = {x.name: x.type for x in dataclasses.fields(Anime) if x.name not in filter_field}
+        # Filter out vaild fields by name
+        to_update = {k: v for k, v in values.items() if k in fields_name}.items()
+        if not to_update:
+            return False
+        
+        self._update_last_modify(user_id)
+
+        field_sql = []
+        for k, v in to_update:
+            k_type = fields_type.get(k)
+            if k_type is str:
+                v = self._con.escape_string(v)
+                field_sql.append("{} = '{}'".format(k, v))
+            else:
+                field_sql.append("{} = {}".format(k, v))
+
+        field_sql = ", ".join(field_sql)
+        sql = "UPDATE anime SET {field} WHERE user_id = %s AND id = %s".format(field = field_sql)
+        return self._execute(sql, (user_id, id)) is not None
     
     def delete(self, user_id: int, id: int) -> bool:
-        pass
+        self._update_last_modify(user_id)
+
+        sql = "DELETE FROM anime WHERE user_id = %s AND id = %s"
+        return self._execute(sql, (user_id, id)) is not None
     
-    def get(self, user_id: int, id: int) -> Anime:
-        pass
+    def get(self, user_id: int, id: int) -> Anime | None:
+        sql = "SELECT * FROM anime WHERE user_id = %s AND id = %s"
+        result = self._execute(sql, (user_id, id))
+        if result and len(result) == 1:
+            return Anime(**(result[0]))
+        else:
+            return None
     
     def get_all(self, user_id: int) -> list[Anime]:
-        pass
+        sql = "SELECT * FROM anime WHERE user_id = %s"
+        result = self._execute(sql, (user_id,))
+        if result and len(result) > 0:
+            return [Anime(**x) for x in result]
+        else:
+            return []
     
     def last_modify(self, user_id: int) -> int:
-        pass
+        sql = "SELECT time FROM last_modify WHERE user_id = %s"
+        result = self._execute(sql, (user_id,))
+        if result and len(result) == 1:
+            return int(result[0]['time'])
+        else:
+            return 0
+    
+    def _update_last_modify(self, user_id: int) -> bool:
+        sql = "INSERT INTO last_modify VALUES(%(user_id)s, %(time)s) ON DUPLICATE KEY UPDATE time = %(time)s"
+        return self._execute(sql, {'time':timestamp(), 'user_id':user_id}) is not None
 
 class UserModel(Model):
     """This class provide functions for user related data"""
