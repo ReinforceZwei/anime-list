@@ -2,7 +2,7 @@ var db = new Dexie("AnimeDB");
 var tmp_mtime = 0;
 
 db.version(1).stores({
-    anime: "animeID, &animeName, addedTime, watchedTime, tags",
+    anime: "animeID, animeName, addedTime, watchedTime, tags",
     mtime: 'mtime'
 });
 db.on('ready', () => {
@@ -45,7 +45,7 @@ setupData()
 function initDB(){
     return new Promise((resolve, reject) => {
         $.get('get', {}, function (e) {
-            resolve(JSON.parse(e));
+            resolve(e);
         });
     })
     .then(data => {

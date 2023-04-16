@@ -1,0 +1,43 @@
+html {
+    margin: 0;
+    height: 100%;
+    font-family: Arial, "文泉驛正黑", "WenQuanYi Zen Hei", "儷黑 Pro", "LiHei Pro", "微軟正黑體", "Microsoft JhengHei", "標楷體", DFKai-SB, sans-serif;
+    background: url(data/21.jpg);
+    background-position: right;
+    background-repeat: no-repeat;
+    background-attachment: scroll;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+}
+.dark {
+    background-color: #444444;
+    color: white;
+    border-color: white;
+}
+.container {
+    margin: auto auto;
+    width: min-content;
+    margin-top: 10px;
+    border-left: 4px purple solid;
+    border-radius: 3px;
+    padding: 3px;
+    background-color: white;
+    box-shadow: 0 6px 10px 0 rgba(0,0,0,0.14), 0 1px 18px 0 rgba(0,0,0,0.12), 0 3px 5px -1px rgba(0,0,0,0.2);
+}
+.loginBtn {
+    margin: 0 auto;
+}
+.title{
+    text-align: center;
+    font-size: 1.2em;
+}
+input {
+    display: block;
+    border: 0;
+    border-bottom: 1px black solid;
+    margin: 5px;
+    font-size: 1.2em;
+    padding: 3px;
+}

@@ -35,16 +35,16 @@ class Anime:
         """Return a client compatiable python dict"""
         _tag = "[]" if not self.tags else self.tags
         return {
-            "name": self.name,
-            "id": self.id,
+            "animeName": self.name,
+            "animeID": self.id,
             "addedTime": self.added_time,
             "watchedTime": self.watched_time,
             "downloaded": 1 if self.downloaded else 0,
             "watched": 1 if self.watched else 0,
             "rating": self.rating,
-            "comment": self.comment,
-            "url": self.url,
-            "remark": self.remark,
+            "comment": self.comment if not None else '',
+            "url": self.url if not None else '',
+            "remark": self.remark if not None else '',
             "tags": json.loads(_tag),
         }
 
@@ -55,6 +55,7 @@ class Model:
     def _execute(self, query: str, args=None) -> dict | tuple:
         c = self._con.cursor()
         try:
+            logger.debug("Execute query '%s', %s", query, args)
             rows = c.execute(query, args)
             result = c.fetchall()
             c.close()
@@ -68,8 +69,8 @@ class AnimeModel(Model):
     """This class provide functions for communicating with database"""
     
     def add(self, user_id: int, name: str) -> Anime | None:
-        sql = "INSERT INTO anime(name, user_id) VALUES (%s, %s)"
-        result = self._execute(sql, (name, user_id))
+        sql = "INSERT INTO anime(name, user_id, added_time) VALUES (%s, %s, %s)"
+        result = self._execute(sql, (name, user_id, timestamp()))
         if result is not None:
             id = self._con.insert_id()
             self._update_last_modify(user_id)
@@ -117,13 +118,29 @@ class AnimeModel(Model):
             return None
     
     def get_all(self, user_id: int) -> list[Anime]:
-        sql = "SELECT * FROM anime WHERE user_id = %s"
+        sql = "SELECT * FROM anime WHERE user_id = %s ORDER BY id"
         result = self._execute(sql, (user_id,))
         if result and len(result) > 0:
             return [Anime(**x) for x in result]
         else:
             return []
     
+    def get_watched_sorted(self, user_id: int) -> list[Anime]:
+        sql = "SELECT * FROM anime WHERE user_id = %s AND watched = 1 ORDER BY watched_time"
+        result = self._execute(sql, (user_id,))
+        if result and len(result) > 0:
+            return [Anime(**x) for x in result]
+        else:
+            return []
+    
+    def get_unwatched_sorted(self, user_id: int) -> list[Anime]:
+        sql = "SELECT * FROM anime WHERE user_id = %s AND watched = 0 ORDER BY watched_time"
+        result = self._execute(sql, (user_id,))
+        if result and len(result) > 0:
+            return [Anime(**x) for x in result]
+        else:
+            return []
+
     def last_modify(self, user_id: int) -> int:
         sql = "SELECT time FROM last_modify WHERE user_id = %s"
         result = self._execute(sql, (user_id,))

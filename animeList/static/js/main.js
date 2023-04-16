@@ -3,7 +3,7 @@
 function _getInfo(e, id) { // server get
     var posY = e.pageY
     $.get('get/' + id, {}, function (e) {
-        showInfo(JSON.parse(e), posY);
+        showInfo(e, posY);
     });
 }
 
@@ -310,12 +310,11 @@ function scrollToBottom() {
 } 
 function markAsWatched(id) {
     let data = {
-        "animeID": id,
         "watched": 1,
         "watchedTime": Math.floor(Date.now() / 1000)
     };
     //alert(data.animeID);
-    $.post('update', data, function (e) {
+    $.post('update/' + id, data, function (e) {
         localStorage.setItem('next', 'focus');
         localStorage.setItem('id', id);
         location.reload();
@@ -323,12 +322,11 @@ function markAsWatched(id) {
 } 
 function markAsUnwatched(id) {
     let data = {
-        "animeID": id,
         "watched": "0",
         "watchedTime": 0
     };
     //alert(data.animeID);
-    $.post('update', data, function (e) {
+    $.post('update/' + id, data, function (e) {
         localStorage.setItem('next', 'focus');
         localStorage.setItem('id', id);
         location.reload();

@@ -1,0 +1,16 @@
+{
+  "name": "琳的動漫列表",
+  "short_name": "動漫列表",
+  "theme_color": "#000000",
+  "icons": [
+    {
+      "src": "css/data/Anime-round-min.png",
+      "type": "image/png",
+      "sizes": "500x500"
+    }
+  ],
+  "start_url": "../",
+  "background_color": "#FFFFFF",
+  "display": "standalone",
+  "scope": "../"
+}

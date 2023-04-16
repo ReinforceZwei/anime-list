@@ -1,94 +1,57 @@
-<?php
-$watched_arr = $anime->customGet('watched <> 0','watchedTime');
-$unwatched_arr = $anime->customGet('watched = 0','addedTime');
-$watched = '';
-$unwatched = '';
-$class;
-foreach ($watched_arr as $key => $e){
-    $key = $key + 1;
-    $class = '';
-    $remark = '';
-    if($e->downloaded){
-        $class = $class.'downloaded ';
-    }
-    if($e->rating<0){
-        $class = $class.'deleteLine ';
-    }
-    if($e->remark){
-        $remark = '（'.$e->remark.'）';
-    }
-    $watched = $watched.'<li><a onclick="getInfo(event,'.$e->animeID.')" class="watched '.$class.'" id="id-'.$e->animeID.'">'.$e->animeName.'<span class="remark">'.$remark.'</span></a></li>';
-}
-foreach ($unwatched_arr as $key => $e){
-    $key = $key + 1;
-    $class = '';
-    $remark = '';
-    if($e->downloaded){
-        $class = $class.'downloaded ';
-    }
-    if($e->rating<0){
-        $class = $class.'deleteLine ';
-    }
-    if($e->remark){
-        $remark = '（'.$e->remark.'）';
-    }
-    $unwatched = $unwatched.'<li><a onclick="getInfo(event,'.$e->animeID.')" class="'.$class.'" id="id-'.$e->animeID.'">'.$e->animeName.'<span class="remark">'.$remark.'</span></a></li>';
-}
-?>
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <title>琳的動漫清單</title>
-        <script src="https://reinforce.moe/js/jquery.js"></script>
-        <script src="rateit/jquery.rateit.min.js"></script>
-        <link href="rateit/rateit.css" rel="stylesheet" type="text/css">
-        <link rel="manifest" href="manifest.json">
-        <link rel="shortcut icon" sizes="500x500" href="css/data/Anime-round-min.png">
-        <link rel="apple-touch-icon" sizes="500x500" href="css/data/Anime-round-min.png">
-        <link href="css/main.css" rel="stylesheet" type="text/css">
-        <link href="css/fontello.css" rel="stylesheet" type="text/css">
-        <link href="css/light.css" rel="stylesheet" type="text/css" id="lightMode">
-        <link href="css/dark.css" rel="stylesheet alternate" type="text/css" id="darkMode">
+        <script src="static/js/jquery.js"></script>
+        <script src="static/js/rateit/jquery.rateit.min.js"></script>
+        <link href="static/js/rateit/rateit.css" rel="stylesheet" type="text/css">
+        <link rel="manifest" href="static/manifest.json">
+        <link rel="shortcut icon" sizes="500x500" href="static/css/data/Anime-round-min.png">
+        <link rel="apple-touch-icon" sizes="500x500" href="static/css/data/Anime-round-min.png">
+        <link href="static/css/main.css" rel="stylesheet" type="text/css">
+        <link href="static/css/fontello.css" rel="stylesheet" type="text/css">
+        <link href="static/css/light.css" rel="stylesheet" type="text/css" id="lightMode">
+        <link href="static/css/dark.css" rel="stylesheet alternate" type="text/css" id="darkMode">
         
         <!-- iOS startup screen -->
-        <link rel="apple-touch-startup-image" href="css/data/slash/apple-splash-2048-2732.jpg" media="(device-width: 1024px) and (device-height: 1366px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)">
-        <link rel="apple-touch-startup-image" href="css/data/slash/apple-splash-2732-2048.jpg" media="(device-width: 1024px) and (device-height: 1366px) and (-webkit-device-pixel-ratio: 2) and (orientation: landscape)">
-        <link rel="apple-touch-startup-image" href="css/data/slash/apple-splash-1668-2388.jpg" media="(device-width: 834px) and (device-height: 1194px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)">
-        <link rel="apple-touch-startup-image" href="css/data/slash/apple-splash-2388-1668.jpg" media="(device-width: 834px) and (device-height: 1194px) and (-webkit-device-pixel-ratio: 2) and (orientation: landscape)">
-        <link rel="apple-touch-startup-image" href="css/data/slash/apple-splash-1536-2048.jpg" media="(device-width: 768px) and (device-height: 1024px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)">
-        <link rel="apple-touch-startup-image" href="css/data/slash/apple-splash-2048-1536.jpg" media="(device-width: 768px) and (device-height: 1024px) and (-webkit-device-pixel-ratio: 2) and (orientation: landscape)">
-        <link rel="apple-touch-startup-image" href="css/data/slash/apple-splash-1668-2224.jpg" media="(device-width: 834px) and (device-height: 1112px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)">
-        <link rel="apple-touch-startup-image" href="css/data/slash/apple-splash-2224-1668.jpg" media="(device-width: 834px) and (device-height: 1112px) and (-webkit-device-pixel-ratio: 2) and (orientation: landscape)">
-        <link rel="apple-touch-startup-image" href="css/data/slash/apple-splash-1620-2160.jpg" media="(device-width: 810px) and (device-height: 1080px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)">
-        <link rel="apple-touch-startup-image" href="css/data/slash/apple-splash-2160-1620.jpg" media="(device-width: 810px) and (device-height: 1080px) and (-webkit-device-pixel-ratio: 2) and (orientation: landscape)">
-        <link rel="apple-touch-startup-image" href="css/data/slash/apple-splash-1290-2796.jpg" media="(device-width: 430px) and (device-height: 932px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)">
-        <link rel="apple-touch-startup-image" href="css/data/slash/apple-splash-2796-1290.jpg" media="(device-width: 430px) and (device-height: 932px) and (-webkit-device-pixel-ratio: 3) and (orientation: landscape)">
-        <link rel="apple-touch-startup-image" href="css/data/slash/apple-splash-1179-2556.jpg" media="(device-width: 393px) and (device-height: 852px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)">
-        <link rel="apple-touch-startup-image" href="css/data/slash/apple-splash-2556-1179.jpg" media="(device-width: 393px) and (device-height: 852px) and (-webkit-device-pixel-ratio: 3) and (orientation: landscape)">
-        <link rel="apple-touch-startup-image" href="css/data/slash/apple-splash-1284-2778.jpg" media="(device-width: 428px) and (device-height: 926px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)">
-        <link rel="apple-touch-startup-image" href="css/data/slash/apple-splash-2778-1284.jpg" media="(device-width: 428px) and (device-height: 926px) and (-webkit-device-pixel-ratio: 3) and (orientation: landscape)">
-        <link rel="apple-touch-startup-image" href="css/data/slash/apple-splash-1170-2532.jpg" media="(device-width: 390px) and (device-height: 844px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)">
-        <link rel="apple-touch-startup-image" href="css/data/slash/apple-splash-2532-1170.jpg" media="(device-width: 390px) and (device-height: 844px) and (-webkit-device-pixel-ratio: 3) and (orientation: landscape)">
-        <link rel="apple-touch-startup-image" href="css/data/slash/apple-splash-1125-2436.jpg" media="(device-width: 375px) and (device-height: 812px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)">
-        <link rel="apple-touch-startup-image" href="css/data/slash/apple-splash-2436-1125.jpg" media="(device-width: 375px) and (device-height: 812px) and (-webkit-device-pixel-ratio: 3) and (orientation: landscape)">
-        <link rel="apple-touch-startup-image" href="css/data/slash/apple-splash-1242-2688.jpg" media="(device-width: 414px) and (device-height: 896px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)">
-        <link rel="apple-touch-startup-image" href="css/data/slash/apple-splash-2688-1242.jpg" media="(device-width: 414px) and (device-height: 896px) and (-webkit-device-pixel-ratio: 3) and (orientation: landscape)">
-        <link rel="apple-touch-startup-image" href="css/data/slash/apple-splash-828-1792.jpg" media="(device-width: 414px) and (device-height: 896px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)">
-        <link rel="apple-touch-startup-image" href="css/data/slash/apple-splash-1792-828.jpg" media="(device-width: 414px) and (device-height: 896px) and (-webkit-device-pixel-ratio: 2) and (orientation: landscape)">
-        <link rel="apple-touch-startup-image" href="css/data/slash/apple-splash-1242-2208.jpg" media="(device-width: 414px) and (device-height: 736px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)">
-        <link rel="apple-touch-startup-image" href="css/data/slash/apple-splash-2208-1242.jpg" media="(device-width: 414px) and (device-height: 736px) and (-webkit-device-pixel-ratio: 3) and (orientation: landscape)">
-        <link rel="apple-touch-startup-image" href="css/data/slash/apple-splash-750-1334.jpg" media="(device-width: 375px) and (device-height: 667px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)">
-        <link rel="apple-touch-startup-image" href="css/data/slash/apple-splash-1334-750.jpg" media="(device-width: 375px) and (device-height: 667px) and (-webkit-device-pixel-ratio: 2) and (orientation: landscape)">
-        <link rel="apple-touch-startup-image" href="css/data/slash/apple-splash-640-1136.jpg" media="(device-width: 320px) and (device-height: 568px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)">
-        <link rel="apple-touch-startup-image" href="css/data/slash/apple-splash-1136-640.jpg" media="(device-width: 320px) and (device-height: 568px) and (-webkit-device-pixel-ratio: 2) and (orientation: landscape)">
+        <link rel="apple-touch-startup-image" href="static/css/data/slash/apple-splash-2048-2732.jpg" media="(device-width: 1024px) and (device-height: 1366px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)">
+        <link rel="apple-touch-startup-image" href="static/css/data/slash/apple-splash-2732-2048.jpg" media="(device-width: 1024px) and (device-height: 1366px) and (-webkit-device-pixel-ratio: 2) and (orientation: landscape)">
+        <link rel="apple-touch-startup-image" href="static/css/data/slash/apple-splash-1668-2388.jpg" media="(device-width: 834px) and (device-height: 1194px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)">
+        <link rel="apple-touch-startup-image" href="static/css/data/slash/apple-splash-2388-1668.jpg" media="(device-width: 834px) and (device-height: 1194px) and (-webkit-device-pixel-ratio: 2) and (orientation: landscape)">
+        <link rel="apple-touch-startup-image" href="static/css/data/slash/apple-splash-1536-2048.jpg" media="(device-width: 768px) and (device-height: 1024px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)">
+        <link rel="apple-touch-startup-image" href="static/css/data/slash/apple-splash-2048-1536.jpg" media="(device-width: 768px) and (device-height: 1024px) and (-webkit-device-pixel-ratio: 2) and (orientation: landscape)">
+        <link rel="apple-touch-startup-image" href="static/css/data/slash/apple-splash-1668-2224.jpg" media="(device-width: 834px) and (device-height: 1112px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)">
+        <link rel="apple-touch-startup-image" href="static/css/data/slash/apple-splash-2224-1668.jpg" media="(device-width: 834px) and (device-height: 1112px) and (-webkit-device-pixel-ratio: 2) and (orientation: landscape)">
+        <link rel="apple-touch-startup-image" href="static/css/data/slash/apple-splash-1620-2160.jpg" media="(device-width: 810px) and (device-height: 1080px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)">
+        <link rel="apple-touch-startup-image" href="static/css/data/slash/apple-splash-2160-1620.jpg" media="(device-width: 810px) and (device-height: 1080px) and (-webkit-device-pixel-ratio: 2) and (orientation: landscape)">
+        <link rel="apple-touch-startup-image" href="static/css/data/slash/apple-splash-1290-2796.jpg" media="(device-width: 430px) and (device-height: 932px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)">
+        <link rel="apple-touch-startup-image" href="static/css/data/slash/apple-splash-2796-1290.jpg" media="(device-width: 430px) and (device-height: 932px) and (-webkit-device-pixel-ratio: 3) and (orientation: landscape)">
+        <link rel="apple-touch-startup-image" href="static/css/data/slash/apple-splash-1179-2556.jpg" media="(device-width: 393px) and (device-height: 852px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)">
+        <link rel="apple-touch-startup-image" href="static/css/data/slash/apple-splash-2556-1179.jpg" media="(device-width: 393px) and (device-height: 852px) and (-webkit-device-pixel-ratio: 3) and (orientation: landscape)">
+        <link rel="apple-touch-startup-image" href="static/css/data/slash/apple-splash-1284-2778.jpg" media="(device-width: 428px) and (device-height: 926px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)">
+        <link rel="apple-touch-startup-image" href="static/css/data/slash/apple-splash-2778-1284.jpg" media="(device-width: 428px) and (device-height: 926px) and (-webkit-device-pixel-ratio: 3) and (orientation: landscape)">
+        <link rel="apple-touch-startup-image" href="static/css/data/slash/apple-splash-1170-2532.jpg" media="(device-width: 390px) and (device-height: 844px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)">
+        <link rel="apple-touch-startup-image" href="static/css/data/slash/apple-splash-2532-1170.jpg" media="(device-width: 390px) and (device-height: 844px) and (-webkit-device-pixel-ratio: 3) and (orientation: landscape)">
+        <link rel="apple-touch-startup-image" href="static/css/data/slash/apple-splash-1125-2436.jpg" media="(device-width: 375px) and (device-height: 812px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)">
+        <link rel="apple-touch-startup-image" href="static/css/data/slash/apple-splash-2436-1125.jpg" media="(device-width: 375px) and (device-height: 812px) and (-webkit-device-pixel-ratio: 3) and (orientation: landscape)">
+        <link rel="apple-touch-startup-image" href="static/css/data/slash/apple-splash-1242-2688.jpg" media="(device-width: 414px) and (device-height: 896px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)">
+        <link rel="apple-touch-startup-image" href="static/css/data/slash/apple-splash-2688-1242.jpg" media="(device-width: 414px) and (device-height: 896px) and (-webkit-device-pixel-ratio: 3) and (orientation: landscape)">
+        <link rel="apple-touch-startup-image" href="static/css/data/slash/apple-splash-828-1792.jpg" media="(device-width: 414px) and (device-height: 896px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)">
+        <link rel="apple-touch-startup-image" href="static/css/data/slash/apple-splash-1792-828.jpg" media="(device-width: 414px) and (device-height: 896px) and (-webkit-device-pixel-ratio: 2) and (orientation: landscape)">
+        <link rel="apple-touch-startup-image" href="static/css/data/slash/apple-splash-1242-2208.jpg" media="(device-width: 414px) and (device-height: 736px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)">
+        <link rel="apple-touch-startup-image" href="static/css/data/slash/apple-splash-2208-1242.jpg" media="(device-width: 414px) and (device-height: 736px) and (-webkit-device-pixel-ratio: 3) and (orientation: landscape)">
+        <link rel="apple-touch-startup-image" href="static/css/data/slash/apple-splash-750-1334.jpg" media="(device-width: 375px) and (device-height: 667px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)">
+        <link rel="apple-touch-startup-image" href="static/css/data/slash/apple-splash-1334-750.jpg" media="(device-width: 375px) and (device-height: 667px) and (-webkit-device-pixel-ratio: 2) and (orientation: landscape)">
+        <link rel="apple-touch-startup-image" href="static/css/data/slash/apple-splash-640-1136.jpg" media="(device-width: 320px) and (device-height: 568px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)">
+        <link rel="apple-touch-startup-image" href="static/css/data/slash/apple-splash-1136-640.jpg" media="(device-width: 320px) and (device-height: 568px) and (-webkit-device-pixel-ratio: 2) and (orientation: landscape)">
         
-        <script src="js/dexie.js"></script>
-        <script src="js/caching.js"></script>
-        <script src="js/tmdb.js"></script>
-        <script src="js/main.js"></script>
+        <script src="static/js/dexie.js"></script>
+        <script src="static/js/caching.js"></script>
+        <script src="static/js/tmdb.js"></script>
+        <script src="static/js/main.js"></script>
     </head>
     
     <body>
@@ -96,24 +59,32 @@ foreach ($unwatched_arr as $key => $e){
             <div class="search" style="display:none;">
                 <input type="text" class="searchTerm" placeholder="搜尋">
                 <span class="searchButton" onclick="_search()">
-                <img src="css/data/search.svg">
+                <img src="static/css/data/search.svg">
                 </span>
                 <span style="white-space: nowrap;">tags</span><input type="checkbox" id="searchByTag">
                 <span class="closeSearch" onclick="hideSearchBar()">&#10006;</span>
             </div>
             <div id="searchResult"></div>
-            <div class="toggleSearch" onclick="showSearchBar()"><span></span><img src="css/data/search.svg"></div>
+            <div class="toggleSearch" onclick="showSearchBar()"><span></span><img src="static/css/data/search.svg"></div>
         </div>
         <div class="warpper">
             <div id="animeListContainer">
                 <h1>琳的動漫清單</h1>
                 <div class="subtitle">已看^^</div>
                 <ol class="animeList" id="list-watched">
-                    <?php echo $watched ?>
+                    {% for a in watched %}
+                    <li>
+                        <a onclick="getInfo(event, {{a.id}})" class="watched {{a._css_class}}" id="id-{{a.id}}">{{a.name}}<span class="remark">{{a.remark if a.remark}}</span></a>
+                    </li>
+                    {% endfor %}
                 </ol>
                 <div class="subtitle">想看><</div>
                 <ol class="animeList" id="list-unwatched">
-                    <?php echo $unwatched ?>
+                    {% for a in unwatched %}
+                    <li>
+                        <a onclick="getInfo(event, {{a.id}})" class="{{a._css_class}}" id="id-{{a.id}}">{{a.name}}<span class="remark">{{a.remark if a.remark}}</span></a>
+                    </li>
+                    {% endfor %}
                     <a id="addAnime" onclick="_addAnime()">加新動漫</a>
                 </ol>
             </div>
