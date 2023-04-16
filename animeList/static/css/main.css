@@ -1,0 +1,303 @@
+@media only screen and (min-width: 780px){
+    #animeListContainer{
+        width: 700px;
+        margin: 0 auto;
+        
+    }
+    /*
+    body {
+        /* Center and scale the image nicely 
+        background-image: url("data/21.jpg");
+    	background-position: right;
+    	background-repeat: no-repeat;
+    	background-size: cover;
+    	background-attachment: fixed;
+    }
+    */
+    body:after{
+        content:"";
+        position:fixed; /* stretch a fixed position to the whole screen */
+        top:0;
+        height:100vh; /* fix for mobile browser address bar appearing disappearing */
+        left:0;
+        right:0;
+        z-index:-1; /* needed to keep in the background */
+        background: url(data/21.jpg);
+        background-position: right;
+    	background-repeat: no-repeat;
+    	background-attachment: scroll;
+        -webkit-background-size: cover;
+        -moz-background-size: cover;
+        -o-background-size: cover;
+        background-size: cover;
+    }
+    .animeList{
+        margin-left: 50px;
+    }
+    ::-webkit-scrollbar {
+    width: 5px;
+    }
+    ::-webkit-scrollbar-track {
+        -webkit-border-radius: 10px;
+        border-radius: 10px;
+        /*margin:80px 0 5px 0;*/
+    }
+    ::-webkit-scrollbar-thumb {
+        -webkit-border-radius: 4px;
+        border-radius: 4px;
+        background: #f5f5f5;
+    }
+}
+html {
+    height: 100%;
+}
+body {
+    font:18px/1.5 Helvetica, Arial, Verdana, sans-serif;
+    font-family: Arial, "文泉驛正黑", "WenQuanYi Zen Hei", "儷黑 Pro", "LiHei Pro", "微軟正黑體", "Microsoft JhengHei", "標楷體", DFKai-SB, sans-serif;
+    background-color: gray;
+    height: 100%;
+    margin: 0;
+}
+textarea, input {
+    font-family: Arial, "文泉驛正黑", "WenQuanYi Zen Hei", "儷黑 Pro", "LiHei Pro", "微軟正黑體", "Microsoft JhengHei", "標楷體", DFKai-SB, sans-serif;
+}
+h1 {
+    margin:0;
+    font-size:48px;
+    font-weight:normal;
+    line-height:48px;
+    text-align: center;
+}
+strong {
+    display:inline-block;
+    width:65px;
+}
+td {
+    max-width: 350px;
+}
+.pointer {
+    cursor: pointer;
+}
+.deleteLine {
+    text-decoration: line-through !important;
+}
+.center {
+    text-align: center;
+}
+.td-title {
+    vertical-align: top;
+    white-space: nowrap;
+}
+.animeList a{
+    text-decoration: none;
+    cursor: pointer;
+}
+#animeListContainer {
+    padding: 30px;
+    box-shadow: 0 6px 10px 0 rgba(0,0,0,0.14), 0 1px 18px 0 rgba(0,0,0,0.12), 0 3px 5px -1px rgba(0,0,0,0.2);
+}
+#animeListContainer .subtitle{
+    text-align: center;
+    padding: 20px;
+}
+.warpper {
+    height: 100%;
+}
+#infoPanel {
+    position: fixed;
+    top: 0;
+    right: 0;
+    /*padding-left: 5px;*/
+    margin: 10px;
+    border-left: purple 5px solid;
+    border-radius: 5px;
+    font-size: 16px;
+    max-height: 95vh;
+    overflow-y: auto;
+    background-size: cover;
+}
+#infoPanel #closeButtom {
+    text-align: center;
+    padding-right: 5px;
+    cursor: pointer;
+}
+#editPanel{
+    position: fixed;
+    top: 0;
+    margin: 10px;
+    right: 0;
+    padding: 10px;
+    border-left: purple 5px solid;
+    border-radius: 5px;
+    font-size: 16px;
+}
+#editPanel input,textarea{
+    width: 100%;
+}
+#editPanel #closeButtom {
+    text-align: center;
+}
+#editPanel #saveButtom {
+    text-align: center;
+}
+#addAnimeFloat {
+    position: fixed;
+    background-color: white;
+    border-radius: 50px;
+    height: 50px;
+    width: 50px;
+    bottom: 1px;
+    right: 1px;
+    text-align: center;
+    vertical-align: middle;
+    margin: 10px;
+    box-shadow: 0 6px 10px 0 rgba(0,0,0,0.14), 0 1px 18px 0 rgba(0,0,0,0.12), 0 3px 5px -1px rgba(0,0,0,0.2);
+}
+#addAnimeFloat .plus{
+    font-size: 50px;
+    background: linear-gradient(135deg, white, purple);/*#a849ff;*/
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    vertical-align: middle;
+    line-height: 50px;
+    height: 100%;
+    cursor: pointer;
+}
+.reload {
+    position: fixed;
+    background-color: white;
+    border-radius: 50px;
+    height: 30px;
+    width: 30px;
+    top: 1px;
+    left: 1px;
+    text-align: center;
+    vertical-align: middle;
+    margin: 10px;
+    box-shadow: 0 6px 10px 0 rgba(0,0,0,0.14), 0 1px 18px 0 rgba(0,0,0,0.12), 0 3px 5px -1px rgba(0,0,0,0.2);
+}
+.reload div {
+    font-size: 20px;
+    background: linear-gradient(135deg, white, red);/*#a849ff;*/
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    vertical-align: middle;
+    line-height: 30px;
+    height: 100%;
+    cursor: pointer;
+}
+
+/* search bar template */
+.search {
+  width: 100%;
+  position: relative;
+  display: flex;
+  background: #00B4CC;
+}
+
+.searchTerm {
+  width: 100%;
+  border: 3px solid #00B4CC;
+  border-right: none;
+  padding: 5px;
+  height: 20px;
+  border-radius: 5px 0 0 5px;
+  outline: none;
+  color: #9DBFAF;
+}
+
+.searchTerm:focus{
+  color: #00B4CC;
+}
+
+.searchButton {
+  width: 40px;
+  height: 36px;
+  border: 1px solid #00B4CC;
+  background: #00B4CC;
+  text-align: center;
+  color: #fff;
+  border-radius: 0 5px 5px 0;
+  cursor: pointer;
+  font-size: 20px;
+}
+.searchButton img{
+    width: 25px;
+    padding: 5px;
+}
+.closeSearch {
+    width: 40px;
+    text-align: center;
+    line-height: 35px;
+    cursor: pointer;
+}
+
+.toggleSearch {
+    background-color: white;
+    border-radius: 50px;
+    height: 40px;
+    width: 40px;
+    bottom: 1px;
+    right: 1px;
+    text-align: center;
+    vertical-align: middle;
+    margin: 10px;
+    box-shadow: 0 6px 10px 0 rgba(0,0,0,0.14), 0 1px 18px 0 rgba(0,0,0,0.12), 0 3px 5px -1px rgba(0,0,0,0.2);
+    float: right;
+    cursor: pointer;
+}
+.toggleSearch span{
+    vertical-align: middle;
+    height: 100%;
+    cursor: pointer;
+    display: inline-block;
+}
+.toggleSearch img {
+    width: 20px;
+    vertical-align: middle;
+}
+#searchResult {
+    overflow-y: scroll;
+    max-height: 80vh;
+}
+#searchResult .item {
+    border: 1px black solid;
+}
+#searchResult .item:hover {
+    background-color: #c6c6c6;
+}
+
+/*Resize the wrap to see the search bar change!*/
+.wrap{
+    width: 300px;
+    position: fixed;
+    top: 0;
+    right: 0;
+}
+
+.cover-viewer {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: black;
+}
+
+.cover-viewer img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+.button-container {
+    display: flex;
+    justify-content: space-evenly;
+}
+
+.icon-button {
+    border-radius: 50px;
+    font-size: 1.4em;
+}

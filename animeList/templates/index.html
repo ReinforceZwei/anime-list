@@ -1,0 +1,270 @@
+<?php
+$watched_arr = $anime->customGet('watched <> 0','watchedTime');
+$unwatched_arr = $anime->customGet('watched = 0','addedTime');
+$watched = '';
+$unwatched = '';
+$class;
+foreach ($watched_arr as $key => $e){
+    $key = $key + 1;
+    $class = '';
+    $remark = '';
+    if($e->downloaded){
+        $class = $class.'downloaded ';
+    }
+    if($e->rating<0){
+        $class = $class.'deleteLine ';
+    }
+    if($e->remark){
+        $remark = '（'.$e->remark.'）';
+    }
+    $watched = $watched.'<li><a onclick="getInfo(event,'.$e->animeID.')" class="watched '.$class.'" id="id-'.$e->animeID.'">'.$e->animeName.'<span class="remark">'.$remark.'</span></a></li>';
+}
+foreach ($unwatched_arr as $key => $e){
+    $key = $key + 1;
+    $class = '';
+    $remark = '';
+    if($e->downloaded){
+        $class = $class.'downloaded ';
+    }
+    if($e->rating<0){
+        $class = $class.'deleteLine ';
+    }
+    if($e->remark){
+        $remark = '（'.$e->remark.'）';
+    }
+    $unwatched = $unwatched.'<li><a onclick="getInfo(event,'.$e->animeID.')" class="'.$class.'" id="id-'.$e->animeID.'">'.$e->animeName.'<span class="remark">'.$remark.'</span></a></li>';
+}
+?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <title>琳的動漫清單</title>
+        <script src="https://reinforce.moe/js/jquery.js"></script>
+        <script src="rateit/jquery.rateit.min.js"></script>
+        <link href="rateit/rateit.css" rel="stylesheet" type="text/css">
+        <link rel="manifest" href="manifest.json">
+        <link rel="shortcut icon" sizes="500x500" href="css/data/Anime-round-min.png">
+        <link rel="apple-touch-icon" sizes="500x500" href="css/data/Anime-round-min.png">
+        <link href="css/main.css" rel="stylesheet" type="text/css">
+        <link href="css/fontello.css" rel="stylesheet" type="text/css">
+        <link href="css/light.css" rel="stylesheet" type="text/css" id="lightMode">
+        <link href="css/dark.css" rel="stylesheet alternate" type="text/css" id="darkMode">
+        
+        <!-- iOS startup screen -->
+        <link rel="apple-touch-startup-image" href="css/data/slash/apple-splash-2048-2732.jpg" media="(device-width: 1024px) and (device-height: 1366px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)">
+        <link rel="apple-touch-startup-image" href="css/data/slash/apple-splash-2732-2048.jpg" media="(device-width: 1024px) and (device-height: 1366px) and (-webkit-device-pixel-ratio: 2) and (orientation: landscape)">
+        <link rel="apple-touch-startup-image" href="css/data/slash/apple-splash-1668-2388.jpg" media="(device-width: 834px) and (device-height: 1194px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)">
+        <link rel="apple-touch-startup-image" href="css/data/slash/apple-splash-2388-1668.jpg" media="(device-width: 834px) and (device-height: 1194px) and (-webkit-device-pixel-ratio: 2) and (orientation: landscape)">
+        <link rel="apple-touch-startup-image" href="css/data/slash/apple-splash-1536-2048.jpg" media="(device-width: 768px) and (device-height: 1024px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)">
+        <link rel="apple-touch-startup-image" href="css/data/slash/apple-splash-2048-1536.jpg" media="(device-width: 768px) and (device-height: 1024px) and (-webkit-device-pixel-ratio: 2) and (orientation: landscape)">
+        <link rel="apple-touch-startup-image" href="css/data/slash/apple-splash-1668-2224.jpg" media="(device-width: 834px) and (device-height: 1112px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)">
+        <link rel="apple-touch-startup-image" href="css/data/slash/apple-splash-2224-1668.jpg" media="(device-width: 834px) and (device-height: 1112px) and (-webkit-device-pixel-ratio: 2) and (orientation: landscape)">
+        <link rel="apple-touch-startup-image" href="css/data/slash/apple-splash-1620-2160.jpg" media="(device-width: 810px) and (device-height: 1080px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)">
+        <link rel="apple-touch-startup-image" href="css/data/slash/apple-splash-2160-1620.jpg" media="(device-width: 810px) and (device-height: 1080px) and (-webkit-device-pixel-ratio: 2) and (orientation: landscape)">
+        <link rel="apple-touch-startup-image" href="css/data/slash/apple-splash-1290-2796.jpg" media="(device-width: 430px) and (device-height: 932px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)">
+        <link rel="apple-touch-startup-image" href="css/data/slash/apple-splash-2796-1290.jpg" media="(device-width: 430px) and (device-height: 932px) and (-webkit-device-pixel-ratio: 3) and (orientation: landscape)">
+        <link rel="apple-touch-startup-image" href="css/data/slash/apple-splash-1179-2556.jpg" media="(device-width: 393px) and (device-height: 852px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)">
+        <link rel="apple-touch-startup-image" href="css/data/slash/apple-splash-2556-1179.jpg" media="(device-width: 393px) and (device-height: 852px) and (-webkit-device-pixel-ratio: 3) and (orientation: landscape)">
+        <link rel="apple-touch-startup-image" href="css/data/slash/apple-splash-1284-2778.jpg" media="(device-width: 428px) and (device-height: 926px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)">
+        <link rel="apple-touch-startup-image" href="css/data/slash/apple-splash-2778-1284.jpg" media="(device-width: 428px) and (device-height: 926px) and (-webkit-device-pixel-ratio: 3) and (orientation: landscape)">
+        <link rel="apple-touch-startup-image" href="css/data/slash/apple-splash-1170-2532.jpg" media="(device-width: 390px) and (device-height: 844px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)">
+        <link rel="apple-touch-startup-image" href="css/data/slash/apple-splash-2532-1170.jpg" media="(device-width: 390px) and (device-height: 844px) and (-webkit-device-pixel-ratio: 3) and (orientation: landscape)">
+        <link rel="apple-touch-startup-image" href="css/data/slash/apple-splash-1125-2436.jpg" media="(device-width: 375px) and (device-height: 812px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)">
+        <link rel="apple-touch-startup-image" href="css/data/slash/apple-splash-2436-1125.jpg" media="(device-width: 375px) and (device-height: 812px) and (-webkit-device-pixel-ratio: 3) and (orientation: landscape)">
+        <link rel="apple-touch-startup-image" href="css/data/slash/apple-splash-1242-2688.jpg" media="(device-width: 414px) and (device-height: 896px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)">
+        <link rel="apple-touch-startup-image" href="css/data/slash/apple-splash-2688-1242.jpg" media="(device-width: 414px) and (device-height: 896px) and (-webkit-device-pixel-ratio: 3) and (orientation: landscape)">
+        <link rel="apple-touch-startup-image" href="css/data/slash/apple-splash-828-1792.jpg" media="(device-width: 414px) and (device-height: 896px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)">
+        <link rel="apple-touch-startup-image" href="css/data/slash/apple-splash-1792-828.jpg" media="(device-width: 414px) and (device-height: 896px) and (-webkit-device-pixel-ratio: 2) and (orientation: landscape)">
+        <link rel="apple-touch-startup-image" href="css/data/slash/apple-splash-1242-2208.jpg" media="(device-width: 414px) and (device-height: 736px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)">
+        <link rel="apple-touch-startup-image" href="css/data/slash/apple-splash-2208-1242.jpg" media="(device-width: 414px) and (device-height: 736px) and (-webkit-device-pixel-ratio: 3) and (orientation: landscape)">
+        <link rel="apple-touch-startup-image" href="css/data/slash/apple-splash-750-1334.jpg" media="(device-width: 375px) and (device-height: 667px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)">
+        <link rel="apple-touch-startup-image" href="css/data/slash/apple-splash-1334-750.jpg" media="(device-width: 375px) and (device-height: 667px) and (-webkit-device-pixel-ratio: 2) and (orientation: landscape)">
+        <link rel="apple-touch-startup-image" href="css/data/slash/apple-splash-640-1136.jpg" media="(device-width: 320px) and (device-height: 568px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)">
+        <link rel="apple-touch-startup-image" href="css/data/slash/apple-splash-1136-640.jpg" media="(device-width: 320px) and (device-height: 568px) and (-webkit-device-pixel-ratio: 2) and (orientation: landscape)">
+        
+        <script src="js/dexie.js"></script>
+        <script src="js/caching.js"></script>
+        <script src="js/tmdb.js"></script>
+        <script src="js/main.js"></script>
+    </head>
+    
+    <body>
+        <div class="wrap">
+            <div class="search" style="display:none;">
+                <input type="text" class="searchTerm" placeholder="搜尋">
+                <span class="searchButton" onclick="_search()">
+                <img src="css/data/search.svg">
+                </span>
+                <span style="white-space: nowrap;">tags</span><input type="checkbox" id="searchByTag">
+                <span class="closeSearch" onclick="hideSearchBar()">&#10006;</span>
+            </div>
+            <div id="searchResult"></div>
+            <div class="toggleSearch" onclick="showSearchBar()"><span></span><img src="css/data/search.svg"></div>
+        </div>
+        <div class="warpper">
+            <div id="animeListContainer">
+                <h1>琳的動漫清單</h1>
+                <div class="subtitle">已看^^</div>
+                <ol class="animeList" id="list-watched">
+                    <?php echo $watched ?>
+                </ol>
+                <div class="subtitle">想看><</div>
+                <ol class="animeList" id="list-unwatched">
+                    <?php echo $unwatched ?>
+                    <a id="addAnime" onclick="_addAnime()">加新動漫</a>
+                </ol>
+            </div>
+        </div>
+        <div id="addAnimeFloat" onclick="_addAnime()">
+            <div class="plus">+</div>
+        </div>
+        <div class="reload" onclick="toggleDarkMode()">
+            <div>D</div>
+        </div>
+        <div class="cover-viewer">
+            <img>
+        </div>
+        <div id="infoPanel" style="display:none;">
+            <table class="table">
+                <tr>
+                    <td colspan="2"><div id="closeButtom" onclick="closeInfoPanel()" class="pointer">關閉</div></td>
+                </tr>
+                <tr>
+                    <td class="td-title">動漫名稱: </td>
+                    <td><span id="animeName"></span></td>
+                </tr>
+                <tr>
+                    <td class="td-title"> </td>
+                    <td><input id="animeNameCopy"><a onclick="copyNameToClipboard()" class="pointer">複製</a></td>
+                </tr>
+                <tr>
+                    <td class="td-title">動漫編號: </td>
+                    <td><span id="animeID"></span></td>
+                </tr>
+                <tr>
+                    <td class="td-title">新增時間: </td>
+                    <td><span id="addedTime"></span></td>
+                </tr>
+                <tr>
+                    <td class="td-title">已下載: </td>
+                    <td><span id="downloaded"></span></td>
+                </tr>
+                <tr>
+                    <td class="td-title">已觀看: </td>
+                    <td><span id="watched"></span></td>
+                </tr>
+                <tr>
+                    <td class="td-title">觀看時間: </td>
+                    <td><span id="watchedTime"></span></td>
+                </tr>
+                <tr>
+                    <td class="td-title">估計耗時: </td>
+                    <td><span id="estimateTime"></span></td>
+                </tr>
+                <tr>
+                    <td class="td-title">感想: </td>
+                    <td><span id="comment"></span></td>
+                </tr>
+                <tr>
+                    <td class="td-title">評分: </td>
+                    <td><div id="rating"></div><div id="giveUp" style="display:none;">棄番</div></td>
+                </tr>
+                <tr>
+                    <td class="td-title">備註: </td>
+                    <td><span id="remark"></span></td>
+                </tr>
+                <tr>
+                    <td class="td-title">標籤: </td>
+                    <td><span id="tags"></span></td>
+                </tr>
+                <tr>
+                    <td class="td-title">網址: </td>
+                    <td><span id="url"></span></td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        <div class="center button-container">
+                            <span id="view-cover" class="pointer" title="檢視海報"><i class="icon-picture"></i>海報</span>
+                            <span id="edit" class="pointer" title="編輯資料"><i class="icon-edit"></i>編輯</span>
+                            <span id="markAsWatched" class="pointer" title="標記已看"><i class="icon-bookmark"></i>已看</span>
+                            <span id="markAsUnwatched" class="pointer" title="標記未看"><i class="icon-bookmark-empty"></i>未看</span>
+                        </div>
+                    </td>
+                </tr>
+                <!--<tr>
+                    <td colspan="2" class="center"><span id="view-cover" class="pointer"><i class="icon-picture"></i>檢視海報</span></td>
+                </tr>
+                <tr>
+                    <td colspan="2" class="center"><span id="edit" class="pointer"><i class="icon-edit"></i>編輯資料</span></td>
+                </tr>
+                <tr>
+                    <td colspan="2" class="center">
+                        <span id="markAsWatched" class="pointer"><i class="icon-eye"></i>標記已看</span>
+                        <span id="markAsUnwatched" class="pointer"><i class="icon-eye-off"></i>標記未看</span>
+                    </td>
+                </tr>-->
+            </table>
+        </div>
+        <div id="editPanel" style="display:none;">
+            <table>
+                <tr>
+                    <td colspan="2" id="closeButtom" class="center"><span onclick="closeEditPanel()" class="pointer">關閉</span></td>
+                </tr>
+                <tr>
+                    <td>動漫編號: </td> 
+                    <td><span id="animeID"></span></td>
+                </tr>
+                <tr>
+                    <td>動漫名稱: </td>
+                    <td><input id="animeName"></td>
+                </tr>
+                <tr>
+                    <td>已下載: </td>
+                    <td><input id="downloaded" type="checkbox" style="width: initial;"></td>
+                </tr>
+                <tr>
+                    <td style="vertical-align: top;">感想: </td>
+                    <td><textarea id="comment" style="resize:none;border-width: 2px;padding: 1px;"></textarea></td>
+                </tr>
+                <tr>
+                    <td>評分: </td>
+                    <td><div id="rating"></div></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td>棄番<input type="checkbox" style="width:initial;" id="giveUp"></td>
+                </tr>
+                <tr>
+                    <td class="td-title">備註: </td>
+                    <td><input id="remark"></td>
+                </tr>
+                <tr>
+                    <td class="td-title">標籤: </td>
+                    <td><input id="tags"></td>
+                </tr>
+                <tr>
+                    <td>網址: </td>
+                    <td><input id="url"></td>
+                </tr>
+                <tr>
+                    <td>新增時間: </td>
+                    <td><span id="addedTime"></span></td>
+                </tr>
+                <tr>
+                    <td>已觀看: </td>
+                    <td><span id="watched"></span></td>
+                </tr>
+                <tr>
+                    <td>觀看時間: </td>
+                    <td><span id="watchedTime"></span></td>
+                </tr>
+                <tr>
+                    <td colspan="2" class="center"><span id="saveButtom" class="pointer">儲存</span></td>
+                </tr>
+            </table>
+        </div>
+    </body>
+</html>

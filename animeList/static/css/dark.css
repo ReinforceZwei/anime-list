@@ -1,0 +1,48 @@
+body {
+    color: #cecece;
+}
+li {
+    color: #cecece;
+}
+.warpper {
+    background-color: #00000099;
+    height: initial;
+}
+.pointer {
+    color: #ccabc3;
+}
+.deleteLine {
+    color: #b98bdc !important;
+}
+.remark {
+    color: #918fff;
+}
+.animeList .watched{
+    color: #c79b96;
+}
+.animeList .downloaded {
+    color: #85b792;
+}
+.animeList a{
+    color: #cecece;
+}
+#animeListContainer {
+    background-color: #232323;
+}
+.animeList #addAnime {
+    color: #ff4242;
+}
+#infoPanel {
+    background-color: #0e222d;
+    border-left-color: #b58056;
+}
+#infoPanel .table {
+    background-color: #151515b8;
+}
+#editPanel{
+    background-color: #292722;
+    border-left-color: #b58056;
+}
+#searchResult {
+    background-color: #292527;
+}
