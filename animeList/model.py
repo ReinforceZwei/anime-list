@@ -193,3 +193,11 @@ class UserModel(Model):
     def delete(self, user_id: int) -> bool:
         sql = "DELETE FROM user WHERE id = %s"
         return self._execute(sql, (user_id,)) is not None
+    
+    def app_user_count(self) -> int:
+        sql = "SELECT COUNT(*) AS count FROM user"
+        result = self._execute(sql)
+        if result is not None:
+            return int(result[0]['count'])
+        else:
+            return -1

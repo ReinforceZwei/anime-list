@@ -134,9 +134,10 @@ function addAnime(animeName) {
     };
     //alert(data.animeName);
     $.post('add', data, function (e) {
-        addNewItem(animeName);
+        // TODO: Use insert ID from response
+        addNewItem(animeName, e.animeID);
         scrollToBottom();
-        addCache(animeName);
+        addCache(animeName, e.animeID);
     })
     .fail(function (e) {
         alert("fail\r\nMaybe record already exist?")
@@ -363,12 +364,12 @@ function handleNext() {
     }
 }
 
-function addNewItem(animeName){
+function addNewItem(animeName, animeID){
     let l = $("#list-unwatched");
     let lastChild = l.children().last();
     l.children().last().remove();
     
-    let id = animeListByID[animeListByID.length - 1].animeID + 1;
+    let id = animeID;
     let item = (`
         <li>
             <a onclick="getInfo(event,${id})" id="id-${id}">${animeName}<span class="remark"></span></a>

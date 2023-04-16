@@ -53,6 +53,9 @@ def require_login(func):
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'GET':
+        # Redirect to create user if no users
+        if user._user.app_user_count() == 0:
+            return redirect(url_for('new_user'))
         # Check access token
         access_token = request.cookies.get('__access_token', '')
         if access_token != '':
@@ -113,6 +116,23 @@ def login():
             # Auth failed
             render_template('login.html')
 
+@app.route('/new_user', methods=['GET', 'POST'])
+def new_user():
+    if user._user.app_user_count() > 0:
+        return redirect(url_for('login'))
+    if request.method == 'GET':
+        return render_template('new_user.html')
+    elif request.method == 'POST':
+        name = request.form.get('name')
+        password = request.form.get('password')
+        if user.new_user(name, password):
+            return redirect(url_for('login'))
+        else:
+            return 'Cannot create new user', 400
+    else:
+        # Never reach
+        return redirect(url_for('login'))
+
 @app.get('/')
 @require_login
 def index():
@@ -161,7 +181,7 @@ def add():
     if name != '':
         result = anime.add(g.user_id, name)
         if result is not None:
-            return '', 200
+            return result.to_client_dict()
     return '', 400
 
 @app.post('/update/<int:id>')

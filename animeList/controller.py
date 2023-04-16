@@ -104,3 +104,8 @@ class UserController:
         except jwt.exceptions.InvalidTokenError:
             logger.debug('refresh_token token invalid', exc_info=1)
             return None
+    
+    def new_user(self, name: str, password: str) -> bool:
+        if len(name) == 0 or len(name) > 100 or len(password) == 0:
+            return False
+        return self._user.add(name, password) is not None

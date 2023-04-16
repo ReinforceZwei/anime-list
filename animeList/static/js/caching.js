@@ -109,8 +109,8 @@ function updateCache(anime){
     })
 }
 
-function addCache(animeName){
-    let id = animeListByID[animeListByID.length - 1].animeID + 1;
+function addCache(animeName, animeID){
+    let id = animeID;
     let anime = {
         "animeName":animeName,
         "animeID":id,
