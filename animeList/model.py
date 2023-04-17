@@ -134,7 +134,7 @@ class AnimeModel(Model):
             return []
     
     def get_unwatched_sorted(self, user_id: int) -> list[Anime]:
-        sql = "SELECT * FROM anime WHERE user_id = %s AND watched = 0 ORDER BY watched_time"
+        sql = "SELECT * FROM anime WHERE user_id = %s AND watched = 0 ORDER BY added_time"
         result = self._execute(sql, (user_id,))
         if result and len(result) > 0:
             return [Anime(**x) for x in result]

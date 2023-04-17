@@ -145,7 +145,7 @@ def index():
         if i.rating < 0:
             css_class.append('deleteLine')
         if i.remark:
-            i.remark = '（%s）'.format(i.remark)
+            i.remark = '（{}）'.format(i.remark)
         i._css_class = ', '.join(css_class)
     for i in unwatched:
         css_class = []
@@ -154,7 +154,7 @@ def index():
         if i.rating < 0:
             css_class.append('deleteLine')
         if i.remark:
-            i.remark = '（%s）'.format(i.remark)
+            i.remark = '（{}）'.format(i.remark)
         i._css_class = ', '.join(css_class)
     return render_template('index.html', watched=watched, unwatched=unwatched)
 
