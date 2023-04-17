@@ -19,7 +19,7 @@ db = AnimeDatabase(
 anime_db = AnimeModel(db)
 user_db = UserModel(db)
 anime = AnimeController(anime_db)
-user = UserController(user_db)
+user = UserController(user_db, config.secret_key)
 
 # App routes:
 # GET / -> index
@@ -114,7 +114,7 @@ def login():
             return response
         else:
             # Auth failed
-            render_template('login.html')
+            return render_template('login.html', hint='Invalid username or password')
 
 @app.route('/new_user', methods=['GET', 'POST'])
 def new_user():

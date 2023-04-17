@@ -10,6 +10,7 @@ class AppConfig:
     db_password: str
     db_name: str
     port: int
+    secret_key: str
     
     @staticmethod
     def from_default():
@@ -20,6 +21,7 @@ class AppConfig:
             db_password = "",
             db_name = "animelist",
             port = 5000,
+            secret_key = "",
         )
     
     @staticmethod
@@ -31,7 +33,8 @@ class AppConfig:
             db_user = os.getenv("DB_USER", ""),
             db_password = os.getenv("DB_PASSWORD", ""),
             db_name = os.getenv("DB_NAME", "animelist"),
-            port = os.getenv("PORT", 5000)
+            port = os.getenv("PORT", 5000),
+            secret_key = os.getenv("SECRET_KEY", "")
         )
 
     @staticmethod

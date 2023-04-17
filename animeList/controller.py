@@ -38,9 +38,12 @@ class AnimeController:
         return self._anime.last_modify(user_id)
 
 class UserController:
-    def __init__(self, user_model: UserModel) -> None:
+    def __init__(self, user_model: UserModel, jwt_key: str = "") -> None:
         self._user = user_model
-        self._jwt_key = 'fixed_key' #secrets.token_urlsafe(16)
+        self._jwt_key = jwt_key
+        if self._jwt_key == "":
+            self._jwt_key = secrets.token_urlsafe(16)
+            logger.info('No JWT secret provided. Previously generated token will not work')
     
     def authenticate(self, name: str, password: str) -> tuple[str, str] | None:
         """Authenticate a user and return tuple of `(access token, refresh token)`"""
