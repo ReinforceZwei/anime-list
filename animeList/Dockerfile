@@ -4,11 +4,7 @@ WORKDIR /app
 
 COPY requirements.txt ./
 RUN apt-get update \
-    && apt-get install -y build-essential curl \
-    && apt-get update \
-    && curl https://sh.rustup.rs -sSf | bash -s -- -y
-
-ENV PATH="/root/.cargo/bin:${PATH}"
+    && apt-get install -y python3-bcrypt \
 
 RUN pip install --upgrade pip \
     && pip install --no-cache-dir -r requirements.txt
