@@ -4,7 +4,7 @@ WORKDIR /app
 
 COPY requirements.txt ./
 RUN apt-get update \
-    && apt-get install -y python3-bcrypt \
+    && apt-get install -y python3-bcrypt
 
 RUN pip install --upgrade pip \
     && pip install --no-cache-dir -r requirements.txt
