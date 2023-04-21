@@ -7,6 +7,7 @@ from model import AnimeModel, UserModel
 from controller import AnimeController, UserController
 from utils import timestamp, days_to_seconds
 from middleware import PrefixMiddleware
+from import_data import DataImportHelper
 from log import logger
 import logging
 
@@ -219,6 +220,30 @@ def update(id: int):
 @require_login
 def mtime():
     return str(anime.last_modify(g.user_id))
+
+@app.route('/import', methods=['GET', 'POST'])
+@require_login
+def import_data():
+    if request.method == 'GET':
+        return render_template('import_data.html')
+    elif request.method == 'POST':
+        data_file = request.files.get('data')
+        print(request.files)
+        if not data_file:
+            return 'No file uploaded', 400
+        data = data_file.stream.read()
+        import_helper = DataImportHelper(anime_db)
+        err = import_helper.import_data(g.user_id, data)
+        title = 'Import done'
+        content = ''
+        if len(err):
+            title = 'Import done with errors'
+            content = '<br>'.join(err)
+        return render_template('result.html', title=title, content=content)
+    else:
+        # Never reach
+        return redirect(url_for('login'))
+
 
 if __name__ == "__main__":
     app.run(port = config.port)

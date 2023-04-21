@@ -19,6 +19,7 @@ html {
 .container {
     margin: auto auto;
     width: min-content;
+    min-width: 250px;
     margin-top: 10px;
     border-left: 4px purple solid;
     border-radius: 3px;
