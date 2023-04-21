@@ -6,9 +6,16 @@ from database import AnimeDatabase
 from model import AnimeModel, UserModel
 from controller import AnimeController, UserController
 from utils import timestamp, days_to_seconds
+from middleware import PrefixMiddleware
 from log import logger
+import logging
 
 config = AppConfig.load()
+logger.setLevel(logging.DEBUG if config.debug else logging.INFO)
+
+logger.debug('App launched in debug mode. Please disable debug in production environment!')
+logger.debug(config)
+
 db = AnimeDatabase(
     host=config.db_host,
     user=config.db_user,
@@ -21,6 +28,12 @@ user_db = UserModel(db)
 anime = AnimeController(anime_db)
 user = UserController(user_db, config.secret_key)
 
+app = Flask(__name__)
+
+if config.prefix_path != "":
+    app.config['APPLICATION_ROOT'] = config.prefix_path
+    app.wsgi_app = PrefixMiddleware(app.wsgi_app, prefix=config.prefix_path)
+
 # App routes:
 # GET / -> index
 # GET /get -> Get all anime. Return json
@@ -30,8 +43,6 @@ user = UserController(user_db, config.secret_key)
 # GET /search[[/:query]?q=] -> Search anime. Return json
 # POST /update/:id -> Update anime. Return nothing
 # GET /mtime -> Get last modify time. Return int
-
-app = Flask(__name__)
 
 def require_login(func):
     @wraps(func)
