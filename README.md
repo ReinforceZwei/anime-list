@@ -8,6 +8,34 @@ This project is a rewrite version of my personal version, originally written in 
 
 If you want to try this app, great. You can host it yourself.
 
+### Docker compose
+
+Pull pre-build image from `ghcr.io/reinforcezwei/anime-list:latest`
+
+`amd64`, `arm64` and `armv7` are available.
+
+```yml
+version: "3.9"
+services:
+  app:
+    image: ghcr.io/reinforcezwei/anime-list:latest
+    environment:
+      PORT: 5000
+      DB_HOST: db
+      DB_USER: "root"
+      DB_PASSWORD: "ChangeMe!"
+      SECRET_KEY: "ChangeMeToo!"
+    ports:
+      - "5000:5000"
+  db:
+    image: mariadb
+    restart: always
+    environment:
+      MARIADB_ROOT_PASSWORD: ChangeMe!
+```
+
+### Manual install
+
 - First you will need a MySQL/MariaDB server
 - Python version 3.10 or above (IMPORTANT!)
 - Download project source code
