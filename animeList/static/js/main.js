@@ -532,26 +532,26 @@ var _onScroll = function () {
     }
     prevScrollpos = currentScrollPos;
 }
-$(window).on('scroll', function () {
-    var minScrollTime = 100;
-    var now = new Date().getTime();
+// $(window).on('scroll', function () {
+//     var minScrollTime = 100;
+//     var now = new Date().getTime();
 
-    function processScroll() {
-        _onScroll();
-    }
+//     function processScroll() {
+//         _onScroll();
+//     }
 
-    if (!scrollTimer) {
-        if (now - lastScrollFireTime > (3 * minScrollTime)) {
-            processScroll(); // fire immediately on first scroll
-            lastScrollFireTime = now;
-        }
-        scrollTimer = setTimeout(function () {
-            scrollTimer = null;
-            lastScrollFireTime = new Date().getTime();
-            processScroll();
-        }, minScrollTime);
-    }
-});
+//     if (!scrollTimer) {
+//         if (now - lastScrollFireTime > (3 * minScrollTime)) {
+//             processScroll(); // fire immediately on first scroll
+//             lastScrollFireTime = now;
+//         }
+//         scrollTimer = setTimeout(function () {
+//             scrollTimer = null;
+//             lastScrollFireTime = new Date().getTime();
+//             processScroll();
+//         }, minScrollTime);
+//     }
+// });
 //window.onscroll = _onScroll;
 // on ready function
 $(document).ready(function () {
