@@ -10,7 +10,7 @@ CREATE TABLE IF NOT EXISTS `user` (
 ) CHARACTER SET = utf8mb4;
 """, """
 CREATE TABLE IF NOT EXISTS `anime` (
-    `name` varchar(100) NOT NULL,
+    `name` varchar(100) NOT NULL UNIQUE,
     `id` int(5) NOT NULL PRIMARY KEY AUTO_INCREMENT,
     `user_id` int(5) NOT NULL,
     `added_time` int(10) DEFAULT 0,

@@ -246,4 +246,6 @@ def import_data():
 
 
 if __name__ == "__main__":
+    if config.debug:
+        app.debug = True
     app.run(port = config.port)

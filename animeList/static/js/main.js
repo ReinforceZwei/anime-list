@@ -1,18 +1,12 @@
 // function for get information and show
 
-function _getInfo(e, id) { // server get
-    var posY = e.pageY
+function getInfo(e, id) { // server get
     $.get('get/' + id, {}, function (e) {
-        showInfo(e, posY);
+        showInfo(e);
     });
 }
 
-function getInfo(e, id) { // local get
-    let posY = e.pageY;
-    showInfo(animeListByID[id], posY);
-}
-
-function showInfo(anime, posY) { // posY is useless
+function showInfo(anime) { // posY is useless
     t = {};
     t.animeName = $("#infoPanel #animeName");
     t.animeID = $("#infoPanel #animeID");
@@ -64,19 +58,16 @@ function showInfo(anime, posY) { // posY is useless
     let estimateTime = -1;
     let diff;
     if (anime.watched == "1") {
-        for (let j = 0; j < animeList.length; j++) {
-            if (animeList[j] === undefined) continue;
-            if (animeList[j].animeID == anime.animeID) {
-                if (animeList[j + 1].watched == "1") {
-                    diff = Number.parseInt(anime.watchedTime) - Number.parseInt(animeList[j + 1].watchedTime);
-                    if (diff != 0) {
-                        estimateTime = Math.round(diff / (3600 * 24)) + "日";
-                    } else {
-                        estimateTime = "無法估計";
-                    }
-                }
-                break;
+        let prevWatchedTime = $(`#id-${anime.animeID}`).parent().prev().children().attr('data-watched-time')
+        if (prevWatchedTime !== undefined){
+            diff = Number.parseInt(anime.watchedTime) - Number.parseInt(prevWatchedTime);
+            if (Number.parseInt(prevWatchedTime) === 0 || diff == 0){
+                estimateTime = "無法估計";
+            } else {
+                estimateTime = Math.round(diff / (3600 * 24)) + "日";
             }
+        }else{
+            estimateTime = "這是第一部"
         }
     }
     if (estimateTime === -1) estimateTime = "未觀看";
@@ -134,10 +125,8 @@ function addAnime(animeName) {
     };
     //alert(data.animeName);
     $.post('add', data, function (e) {
-        // TODO: Use insert ID from response
         addNewItem(animeName, e.animeID);
         scrollToBottom();
-        addCache(animeName, e.animeID);
     })
     .fail(function (e) {
         alert("fail\r\nMaybe record already exist?")
@@ -235,7 +224,6 @@ function _saveInfo(id) {
 function saveInfo(anime) {
     console.log(anime);
     update(anime.animeID, anime, ()=>{
-        updateCache(anime);
         closeEditPanel();
         showInfo(animeListByID[anime.animeID]);
         updateItem(animeListByID[anime.animeID]);
@@ -575,4 +563,7 @@ $(document).ready(function () {
     }, 300));
     $("#view-cover").on('click', () => {showCover()});
     $(".cover-viewer img").on('click', () => {closeCover()});
+    onDataLoad();
+    // Caching is removed
+    indexedDB.deleteDatabase('AnimeDB');
 });

@@ -48,8 +48,6 @@
         <link rel="apple-touch-startup-image" href="static/css/data/slash/apple-splash-640-1136.jpg" media="(device-width: 320px) and (device-height: 568px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)">
         <link rel="apple-touch-startup-image" href="static/css/data/slash/apple-splash-1136-640.jpg" media="(device-width: 320px) and (device-height: 568px) and (-webkit-device-pixel-ratio: 2) and (orientation: landscape)">
         
-        <script src="static/js/dexie.js"></script>
-        <script src="static/js/caching.js"></script>
         <script src="static/js/tmdb.js"></script>
         <script src="static/js/main.js"></script>
     </head>
@@ -75,7 +73,7 @@
                 <ol class="animeList" id="list-watched">
                     {% for a in watched %}
                     <li>
-                        <a onclick="getInfo(event, {{a.id}})" class="watched {{a._css_class}}" id="id-{{a.id}}">{{a.name}}<span class="remark">{{a.remark if a.remark}}</span></a>
+                        <a onclick="getInfo(event, {{a.id}})" class="watched {{a._css_class}}" id="id-{{a.id}}" data-watched-time="{{a.watched_time}}">{{a.name}}<span class="remark">{{a.remark if a.remark}}</span></a>
                     </li>
                     {% endfor %}
                 </ol>
