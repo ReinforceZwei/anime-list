@@ -360,6 +360,9 @@ td {
     transition: all 0.5s ease-in-out;
     opacity: 0;
 }
+.dropdown__item a, .dropdown__item a:visited {
+    color: inherit;
+}
 .dropdown__content--active {
     height: 200px;
 }

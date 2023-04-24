@@ -117,7 +117,13 @@
                     </div>
                 </div>
                 <div class="dropdown__item dropdown__button">
-                    <div onclick="toggleDarkMode()"><i class="icon-moon"></i></div>
+                    <div onclick="toggleDarkMode()"><i class="icon-moon-inv"></i></div>
+                </div>
+                <div class="dropdown__item dropdown__button">
+                    <a href="{{url_for('import_data')}}"><i class="icon-upload"></i></a>
+                </div>
+                <div class="dropdown__item dropdown__button">
+                    <a href="{{url_for('logout')}}"><i class="icon-logout"></i></a>
                 </div>
             </div>
         </div>
