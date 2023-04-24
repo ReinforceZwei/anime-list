@@ -10,7 +10,7 @@ CREATE TABLE IF NOT EXISTS `user` (
 ) CHARACTER SET = utf8mb4;
 """, """
 CREATE TABLE IF NOT EXISTS `anime` (
-    `name` varchar(100) NOT NULL UNIQUE,
+    `name` varchar(100) NOT NULL,
     `id` int(5) NOT NULL PRIMARY KEY AUTO_INCREMENT,
     `user_id` int(5) NOT NULL,
     `added_time` int(10) DEFAULT 0,
@@ -22,7 +22,8 @@ CREATE TABLE IF NOT EXISTS `anime` (
     `url` text DEFAULT NULL,
     `remark` varchar(500) DEFAULT NULL,
     `tags` varchar(1000) NOT NULL DEFAULT '[]',
-    FOREIGN KEY(`user_id`) REFERENCES `user`(`id`) ON DELETE CASCADE
+    FOREIGN KEY(`user_id`) REFERENCES `user`(`id`) ON DELETE CASCADE,
+    UNIQUE KEY `name_uniq_id` (`user_id`,`name`)
 ) CHARACTER SET = utf8mb4;
 ""","""
 CREATE TABLE IF NOT EXISTS `last_modify` (

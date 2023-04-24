@@ -58,13 +58,13 @@ class UserController:
         else:
             return None
     
-    def verify_token(self, jwt_token: str) -> int | None:
-        """Verify user token. Return user ID if token vaild"""
+    def verify_token(self, jwt_token: str) -> User | None:
+        """Verify user token. Return `User` object with password empty if token vaild"""
         if len(jwt_token) == 0:
             return False
         try:
             payload = jwt.decode(jwt_token, self._jwt_key, ['HS256'])
-            return payload['user_id']
+            return User(payload['user_id'], payload['name'], '')
         except jwt.exceptions.InvalidTokenError:
             logger.debug('verify_token token invalid', exc_info=1)
             return None

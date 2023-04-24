@@ -51,13 +51,19 @@ def require_login(func):
         access_token = request.cookies.get('__access_token', '')
         if access_token == "":
             logger.debug('@require_login access token empty')
-            return redirect(url_for('login'))
+            return redirect(url_for('logout'))
         
-        user_id = user.verify_token(access_token)
-        if user_id is None:
+        t_user = user.verify_token(access_token)
+        if t_user is None:
             logger.debug('@require_login access token invalid')
-            return redirect(url_for('login'))
-        g.user_id = user_id
+            return redirect(url_for('logout'))
+        # Get user from db and verify the name
+        v_user = user._user.get(t_user.user_id)
+        if v_user is None or v_user.name != t_user.name:
+            logger.debug('@require_login token user not match db record')
+            return redirect(url_for('logout'))
+        
+        g.user_id = v_user.user_id
         logger.debug('@require_login user ok')
         return func(*args, **kwargs)
     return decorated_function
@@ -127,6 +133,14 @@ def login():
         else:
             # Auth failed
             return render_template('login.html', hint='Invalid username or password')
+
+@app.route('/logout', methods=['GET', 'POST'])
+def logout():
+    # Doesn't require valid login. We always delete user cookies
+    response = make_response(redirect(url_for('login')))
+    response.set_cookie('__access_token', '', expires=0)
+    response.set_cookie('__refresh_token', '', expires=0)
+    return response
 
 @app.route('/new_user', methods=['GET', 'POST'])
 def new_user():
