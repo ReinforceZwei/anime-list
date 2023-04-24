@@ -305,10 +305,9 @@ function markAsWatched(id) {
     };
     //alert(data.animeID);
     $.post('update/' + id, data, function (e) {
-        // TODO: Don't reload page. Make the change locally
-        localStorage.setItem('next', 'focus');
-        localStorage.setItem('id', id);
-        location.reload();
+        $(`#id-${id}`).parent().appendTo('#list-watched');
+        findOnPage(id);
+        getInfo(undefined, id);
     });
 } 
 function markAsUnwatched(id) {
