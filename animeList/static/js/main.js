@@ -6,7 +6,7 @@ function getInfo(e, id) { // server get
     });
 }
 
-function showInfo(anime) { // posY is useless
+function showInfo(anime) {
     t = {};
     t.animeName = $("#infoPanel #animeName");
     t.animeID = $("#infoPanel #animeID");
@@ -71,17 +71,17 @@ function showInfo(anime) { // posY is useless
         }
     }
     if (estimateTime === -1) estimateTime = "未觀看";
-    t.animeName.html(anime.animeName);
-    t.animeID.html(anime.animeID);
-    t.addedTime.html(_addedTime);
-    t.downloaded.html(anime.downloaded != 0 ? "是" : "否");
-    t.watched.html(anime.watched != 0 ? "是" : "否");
-    t.watchedTime.html(_watchedTime);
-    t.estimateTime.html(estimateTime);
-    t.comment.html(anime.comment ? anime.comment.replace(/(?:\r\n|\r|\n)/g, '<br>') : '');
-    t.url.html(linkify(anime.url ? anime.url : ""));
-    t.remark.html(anime.remark);
-    t.tags.html(anime.tags.join(','));
+    t.animeName.text(anime.animeName);
+    t.animeID.text(anime.animeID);
+    t.addedTime.text(_addedTime);
+    t.downloaded.text(anime.downloaded != 0 ? "是" : "否");
+    t.watched.text(anime.watched != 0 ? "是" : "否");
+    t.watchedTime.text(_watchedTime);
+    t.estimateTime.text(estimateTime);
+    t.comment.text(anime.comment ? anime.comment : '');
+    t.url.text(linkify(anime.url ? anime.url : ""));
+    t.remark.text(anime.remark);
+    t.tags.text(anime.tags.join(','));
 
     if (anime.rating == -1) {
         t.rating.hide();
@@ -151,7 +151,7 @@ function editInfo(anime) {
 
     t.save.off('click');
     t.save.click(function () {
-        _saveInfo(anime.animeID)
+        _saveInfo(anime.animeID, anime)
     });
 
     let _watchedTime;
@@ -181,15 +181,15 @@ function editInfo(anime) {
     });
     t.rating.rateit('value', anime.rating);
 
-    t.watched.html(anime.watched != 0 ? "是" : "否");
-    t.watchedTime.html(_watchedTime);
-    t.animeID.html(anime.animeID);
-    t.addedTime.html(_addedTime);
+    t.watched.text(anime.watched != 0 ? "是" : "否");
+    t.watchedTime.text(_watchedTime);
+    t.animeID.text(anime.animeID);
+    t.addedTime.text(_addedTime);
 
     showEditPanel();
 }
 
-function _saveInfo(id) {
+function _saveInfo(id, original) {
     t = {};
     t.animeName = $("#editPanel #animeName");
     t.animeID = $("#editPanel #animeID");
@@ -218,15 +218,16 @@ function _saveInfo(id) {
         anime.rating = -1;
     }
 
-    saveInfo(anime);
+    saveInfo(anime, original);
 }
 
-function saveInfo(anime) {
+function saveInfo(anime, original) {
     console.log(anime);
     update(anime.animeID, anime, ()=>{
         closeEditPanel();
-        showInfo(animeListByID[anime.animeID]);
-        updateItem(animeListByID[anime.animeID]);
+        original = Object.assign(original, anime)
+        showInfo(original);
+        updateItem(original);
     });
 }
 
@@ -237,16 +238,6 @@ function _search() {
         return;
     }
     let field = $("#searchByTag").prop('checked') ? "tags" : "animeName";
-    // TODO: Don't loop through DOM everytime. Cache the name list
-    let animes = []
-    $('.animeList li a').each((i, e) => {
-        let o = {
-            'animeName': e.text,
-            'animeID': Number(e.id.replace('id-',''))
-        }
-        animes.push(o)
-    })
-    animes.sort((a, b) => a.animeName < b.animeName ? -1 : 1)
     local_search(string, animes, field, function (e) {
         //let anime = JSON.parse(e);
         let anime = e;
@@ -314,6 +305,7 @@ function markAsWatched(id) {
     };
     //alert(data.animeID);
     $.post('update/' + id, data, function (e) {
+        // TODO: Don't reload page. Make the change locally
         localStorage.setItem('next', 'focus');
         localStorage.setItem('id', id);
         location.reload();
@@ -510,9 +502,26 @@ function linkify(text) {
         return '<a href="' + url + '">' + decodeURIComponent(url) + '</a>';
     });
 }
+
+function makeSearchCache() {
+    // Extract name list from DOM for local searching
+    animes = [];
+    $('.animeList li a').each((i, e) => {
+        let o = {
+            'animeName': e.text,
+            'animeID': Number(e.id.replace('id-',''))
+        }
+        animes.push(o)
+    })
+    animes.sort((a, b) => a.animeName < b.animeName ? -1 : 1)
+}
 // global var declear
-var animeList;
-var animeListByID = [];
+
+// Deprecated variables
+//var animeList;
+//var animeListByID = [];
+
+var animes = [];
 
 var urlRegex = /(\b(https?|ftp|file):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;()]*[-A-Z0-9+&@#\/%=~_|()])/gi;
 /** This part will be handled by caching. To Be Removed
@@ -588,6 +597,8 @@ $(document).ready(function () {
     }, 300));
     $("#view-cover").on('click', () => {showCover()});
     $(".cover-viewer img").on('click', () => {closeCover()});
+
+    makeSearchCache()
     onDataLoad();
     // Caching is removed
     indexedDB.deleteDatabase('AnimeDB');
