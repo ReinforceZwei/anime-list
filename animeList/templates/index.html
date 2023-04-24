@@ -54,7 +54,7 @@
     
     <body>
         <div class="wrap">
-            <div class="search" style="display:none;">
+            <!-- <div class="search" style="display:none;">
                 <input type="text" class="searchTerm" placeholder="搜尋">
                 <span class="searchButton" onclick="_search()">
                 <img src="static/css/data/search.svg">
@@ -63,7 +63,23 @@
                 <span class="closeSearch" onclick="hideSearchBar()">&#10006;</span>
             </div>
             <div id="searchResult"></div>
-            <div class="toggleSearch" onclick="showSearchBar()"><span></span><img src="static/css/data/search.svg"></div>
+            <div class="toggleSearch" onclick="showSearchBar()"><span></span><img src="static/css/data/search.svg"></div> -->
+            <div class="search">
+                <div class="search__container">
+                    <div class="search__bar">
+                        <input type="text" class="search__input" placeholder="搜尋" id="searchInput">
+                        <!-- <span class="search__button" onclick="_search()">
+                            &#128270;
+                        </span> -->
+                    </div>
+                    <div class="search__toggle" onclick="toggleSearchBar()">
+                        <div class="magnifier">
+                        </div>
+                    </div>
+                </div>
+                <div class="search__result" id="searchResult">
+                </div>
+            </div>
         </div>
         <div class="warpper"></div>
         <div>
@@ -91,8 +107,19 @@
         <div id="addAnimeFloat" onclick="_addAnime()">
             <div class="plus">+</div>
         </div>
-        <div class="reload" onclick="toggleDarkMode()">
-            <div><i class="icon-moon"></i></div>
+        <div class="dropdown">
+            <div class="dropdown__content">
+                <div class="dropdown__trigger dropdown__button" onclick="toggleDropdown()">
+                    <div class="hamburger">
+                        <div class="hamburger__bar1"></div>
+                        <div class="hamburger__bar2"></div>
+                        <div class="hamburger__bar3"></div>
+                    </div>
+                </div>
+                <div class="dropdown__item dropdown__button">
+                    <div onclick="toggleDarkMode()"><i class="icon-moon"></i></div>
+                </div>
+            </div>
         </div>
         <div class="cover-viewer">
             <img>

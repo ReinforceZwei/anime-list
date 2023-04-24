@@ -248,4 +248,4 @@ def import_data():
 if __name__ == "__main__":
     if config.debug:
         app.debug = True
-    app.run(port = config.port)
+    app.run(port = config.port, host='0.0.0.0')

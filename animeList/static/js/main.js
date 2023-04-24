@@ -231,25 +231,35 @@ function saveInfo(anime) {
 }
 
 function _search() {
-    let string = $(".searchTerm").val();
+    let string = $("#searchInput").val();
     if (string === '' || string === ' ') {
         $("#searchResult").empty();
         return;
     }
     let field = $("#searchByTag").prop('checked') ? "tags" : "animeName";
-    local_search(string, animeList, field, function (e) {
+    // TODO: Don't loop through DOM everytime. Cache the name list
+    let animes = []
+    $('.animeList li a').each((i, e) => {
+        let o = {
+            'animeName': e.text,
+            'animeID': Number(e.id.replace('id-',''))
+        }
+        animes.push(o)
+    })
+    animes.sort((a, b) => a.animeName < b.animeName ? -1 : 1)
+    local_search(string, animes, field, function (e) {
         //let anime = JSON.parse(e);
         let anime = e;
         let node = $("#searchResult");
         //console.log(anime);
         node.empty();
         if (anime.length == 0) {
-            node.append('<div class="item">沒有結果</div>');
+            node.append('<div class="search__item">沒有結果</div>');
             return;
         }
         anime.forEach((e, i) => {
             //console.log(e);
-            let code = `<div class="item" onclick="findOnPage(${e.animeID})">${e.animeName}</div>`;
+            let code = `<div class="search__item" onclick="findOnPage(${e.animeID})">${e.animeName}</div>`;
             node.append(code);
         });
     });
@@ -393,14 +403,22 @@ function showEditPanel() {
 } 
 function hideSearchBar() {
     $("#searchResult").empty();
-    $(".search").hide();
-    $(".toggleSearch").show();
+    $(".search").removeClass('search--active')
+    $('.magnifier').removeClass('magnifier--active')
 } 
 function showSearchBar() {
-    $(".search").show();
-    $(".toggleSearch").hide();
-    $(".searchTerm").focus();
-} 
+    $(".search").addClass('search--active');
+    $('.magnifier').addClass('magnifier--active')
+    $("#searchInput").focus();
+    _search();
+}
+function toggleSearchBar() {
+    if ($(".search").hasClass('search--active')) {
+        hideSearchBar()
+    }else{
+        showSearchBar()
+    }
+}
 function toggleDarkMode() {
     if (!mode) {
         // dark
@@ -428,6 +446,13 @@ function showCover(){
 }
 function closeCover(){
     $(".cover-viewer").hide();
+}
+function toggleDropdown() {
+    $('.hamburger').toggleClass("hamburger--change");
+    $('.dropdown__content').toggleClass('dropdown__content--active');
+    $('.dropdown__item').each(function (i, el) {
+      	$(el).css('--n', i + 1);
+    });
 }
 
 function copyNameToClipboard() {
@@ -558,7 +583,7 @@ $(document).ready(function () {
     closeInfoPanel();
     closeEditPanel();
     hideSearchBar();
-    $(".searchTerm").on('keyup input', delay(function (e) {
+    $("#searchInput").on('keyup input', delay(function (e) {
         _search();
     }, 300));
     $("#view-cover").on('click', () => {showCover()});
