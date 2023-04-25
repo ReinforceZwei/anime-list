@@ -11,10 +11,10 @@
         <link rel="manifest" href="static/manifest.json">
         <link rel="shortcut icon" sizes="500x500" href="static/css/data/Anime-round-min.png">
         <link rel="apple-touch-icon" sizes="500x500" href="static/css/data/Anime-round-min.png">
+        <link href="static/css/theme.css" rel="stylesheet" type="text/css">
         <link href="static/css/main.css" rel="stylesheet" type="text/css">
-        <link href="static/css/fontello.css" rel="stylesheet" type="text/css">
-        <link href="static/css/light.css" rel="stylesheet" type="text/css" id="lightMode">
         <link href="static/css/dark.css" rel="stylesheet alternate" type="text/css" id="darkMode">
+        <link href="static/css/fontello.css" rel="stylesheet" type="text/css">
         
         <!-- iOS startup screen -->
         <link rel="apple-touch-startup-image" href="static/css/data/slash/apple-splash-2048-2732.jpg" media="(device-width: 1024px) and (device-height: 1366px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)">
@@ -53,17 +53,7 @@
     </head>
     
     <body>
-        <div class="wrap">
-            <!-- <div class="search" style="display:none;">
-                <input type="text" class="searchTerm" placeholder="搜尋">
-                <span class="searchButton" onclick="_search()">
-                <img src="static/css/data/search.svg">
-                </span>
-                <span style="white-space: nowrap;">tags</span><input type="checkbox" id="searchByTag">
-                <span class="closeSearch" onclick="hideSearchBar()">&#10006;</span>
-            </div>
-            <div id="searchResult"></div>
-            <div class="toggleSearch" onclick="showSearchBar()"><span></span><img src="static/css/data/search.svg"></div> -->
+        <div>
             <div class="search">
                 <div class="search__container">
                     <div class="search__bar">
@@ -116,13 +106,13 @@
                         <div class="hamburger__bar3"></div>
                     </div>
                 </div>
-                <div class="dropdown__item dropdown__button">
+                <div class="dropdown__item dropdown__button" title="Dark Mode">
                     <div onclick="toggleDarkMode()"><i class="icon-moon-inv"></i></div>
                 </div>
-                <div class="dropdown__item dropdown__button">
+                <div class="dropdown__item dropdown__button" title="Import Data">
                     <a href="{{url_for('import_data')}}"><i class="icon-upload"></i></a>
                 </div>
-                <div class="dropdown__item dropdown__button">
+                <div class="dropdown__item dropdown__button" title="Logout">
                     <a href="{{url_for('logout')}}"><i class="icon-logout"></i></a>
                 </div>
             </div>

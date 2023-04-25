@@ -420,14 +420,12 @@ function toggleDarkMode() {
     }
 } 
 function darkModeOn() {
-    $("link#lightMode")[0].rel = "alternate stylesheet";
     $("link#darkMode")[0].rel = "stylesheet";
     localStorage.setItem('darkMode', 1);
     mode = 1;
 } 
 function darkModeOff() {
     $("link#darkMode")[0].rel = "alternate stylesheet";
-    $("link#lightMode")[0].rel = "stylesheet";
     localStorage.setItem('darkMode', 0);
     mode = 0;
 } 

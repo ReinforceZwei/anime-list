@@ -1,47 +1,33 @@
-body {
-    color: #cecece;
-}
-li {
-    color: #cecece;
-}
-.warpper {
-    background-color: #00000099;
-}
-.pointer {
-    color: #ccabc3;
-}
-.deleteLine {
-    color: #b98bdc !important;
-}
-.remark {
-    color: #918fff;
-}
-.animeList .watched{
-    color: #c79b96;
-}
-.animeList .downloaded {
-    color: #85b792;
-}
-.animeList a{
-    color: #cecece;
-}
-#animeListContainer {
-    background-color: #232323;
-}
-.animeList #addAnime {
-    color: #ff4242;
-}
-#infoPanel {
-    background-color: #0e222d;
-    border-left-color: #b58056;
-}
-#infoPanel .table {
-    background-color: #151515b8;
-}
-#editPanel{
-    background-color: #292722;
-    border-left-color: #b58056;
-}
-#searchResult {
-    background-color: #292527;
+:root {
+    /* General text color (title, info...) */
+    --text-color: #cecece;
+    /* Clickable button or link */
+    --link-color: #ccabc3;
+
+    /* Gave-up anime */
+    --deleted-text-color: #b98bdc;
+    /* Remark text */
+    --remark-text-color: #918fff;
+    /* Watched anime */
+    --watched-text-color: #c79b96;
+    /* Downloaded anime */
+    --downloaded-text-color: #85b792;
+    /* New anime */
+    --add-anime-text-color: #ff4242;
+    
+    --sheet-background: #232323;
+    /* Info panel background */
+    --info-background: #0e222d;
+    /* Edit panel background */
+    --edit-background: #292722;
+    /* Search result list */
+    --search-result-background: #232323;
+
+    /* Overlay between background image and sheet */
+    --backdrop-overlay: #00000099;
+    /* Overlay between text and poster */
+    --info-poster-overlay: #151515b8;
+
+    --info-border-color: #b58056;
+    --edit-border-color: #b58056;
 }

@@ -57,6 +57,7 @@ body {
     background-color: gray;
     height: 100%;
     margin: 0;
+    color: var(--text-color);
 }
 textarea, input {
     font-family: Arial, "文泉驛正黑", "WenQuanYi Zen Hei", "儷黑 Pro", "LiHei Pro", "微軟正黑體", "Microsoft JhengHei", "標楷體", DFKai-SB, sans-serif;
@@ -77,9 +78,14 @@ td {
 }
 .pointer {
     cursor: pointer;
+    color: var(--link-color);
 }
 .deleteLine {
     text-decoration: line-through !important;
+    color: var(--deleted-text-color);
+}
+.remark {
+    color: var(--remark-text-color);
 }
 .center {
     text-align: center;
@@ -92,8 +98,18 @@ td {
     text-decoration: none;
     cursor: pointer;
 }
+.animeList .watched {
+    color: var(--watched-text-color);
+}
+.animeList .downloaded {
+    color: var(--downloaded-text-color);
+}
+#addAnime {
+    color: var(--add-anime-text-color);
+}
 #animeListContainer {
     padding: 30px;
+    background-color: var(--sheet-background);
     box-shadow: 0 6px 10px 0 rgba(0,0,0,0.14), 0 1px 18px 0 rgba(0,0,0,0.12), 0 3px 5px -1px rgba(0,0,0,0.2);
 }
 #animeListContainer .subtitle{
@@ -105,6 +121,7 @@ td {
     width: 100%;
     position: fixed;
     z-index: -1;
+    background-color: var(--backdrop-overlay);
 }
 #infoPanel {
     position: fixed;
@@ -112,12 +129,16 @@ td {
     right: 0;
     /*padding-left: 5px;*/
     margin: 10px;
-    border-left: purple 5px solid;
+    border-left: var(--info-border-color) 5px solid;
     border-radius: 5px;
     font-size: 16px;
     max-height: 95vh;
     overflow-y: auto;
     background-size: cover;
+    background-color: var(--info-background);
+}
+#infoPanel .table {
+    background-color: var(--info-poster-overlay);
 }
 #infoPanel #closeButtom {
     text-align: center;
@@ -133,9 +154,10 @@ td {
     margin: 10px;
     right: 0;
     padding: 10px;
-    border-left: purple 5px solid;
+    border-left: var(--edit-border-color) 5px solid;
     border-radius: 5px;
     font-size: 16px;
+    background-color: var(--edit-background);
 }
 #editPanel input,textarea{
     width: 100%;
@@ -169,35 +191,12 @@ td {
     height: 100%;
     cursor: pointer;
 }
-.reload {
-    position: fixed;
-    background-color: white;
-    border-radius: 50px;
-    height: 30px;
-    width: 30px;
-    top: 1px;
-    left: 1px;
-    text-align: center;
-    vertical-align: middle;
-    margin: 10px;
-    box-shadow: 0 6px 10px 0 rgba(0,0,0,0.14), 0 1px 18px 0 rgba(0,0,0,0.12), 0 3px 5px -1px rgba(0,0,0,0.2);
-}
-.reload div {
-    font-size: 20px;
-    background: linear-gradient(135deg, white, red);/*#a849ff;*/
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    vertical-align: middle;
-    line-height: 30px;
-    height: 100%;
-    cursor: pointer;
-}
 
 /* search bar template */
 .search {
     display: flex;
     flex-direction: column;
-    position: absolute;
+    position: fixed;
     right: 10px;
     top: 10px;
     background-color: white;
@@ -253,6 +252,7 @@ td {
     overflow-y: scroll;
     max-height: 80vh;
     border-radius: 5px;
+    background-color: var(--search-result-background);
 }
 .search--active .search__result {
     display: initial;
@@ -397,13 +397,6 @@ td {
     transform: translate(0, -7px) rotate(45deg);
 }
 
-/*Resize the wrap to see the search bar change!*/
-.wrap{
-    width: 300px;
-    position: fixed;
-    top: 0;
-    right: 0;
-}
 
 .cover-viewer {
     display: none;
@@ -430,4 +423,11 @@ td {
 .icon-button {
     border-radius: 50px;
     font-size: 1.4em;
+}
+
+.gradient-text {
+    background: linear-gradient(135deg, white, purple);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
 }

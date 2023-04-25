@@ -1,0 +1,33 @@
+:root {
+    /* General text color (title, info...) */
+    --text-color: #000000;
+    /* Clickable button or link */
+    --link-color: #80005e;
+
+    /* Gave-up anime */
+    --deleted-text-color: #7e00de;
+    /* Remark text */
+    --remark-text-color: #0300bb;
+    /* Watched anime */
+    --watched-text-color: #ab1000;
+    /* Downloaded anime */
+    --downloaded-text-color: #00651a;
+    /* New anime */
+    --add-anime-text-color: red;
+    
+    --sheet-background: #fff;
+    /* Info panel background */
+    --info-background: #a3dfff;
+    /* Edit panel background */
+    --edit-background: wheat;
+    /* Search result list */
+    --search-result-background: white;
+
+    /* Overlay between background image and sheet */
+    --backdrop-overlay: #00000000;
+    /* Overlay between text and poster */
+    --info-poster-overlay: #f4faffb8;
+
+    --info-border-color: #ff6631;
+    --edit-border-color: #ff6631;
+}
