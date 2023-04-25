@@ -63,10 +63,21 @@ class UserController:
         if len(jwt_token) == 0:
             return False
         try:
-            payload = jwt.decode(jwt_token, self._jwt_key, ['HS256'])
+            # Extract user id
+            unsafe_payload = jwt.decode(jwt_token, '', ['HS256'], options={"verify_signature": False})
+            unsafe_user_id = int(unsafe_payload.get('user_id'))
+            user = self._user.get(unsafe_user_id)
+            if user is None:
+                logger.debug('verify_token unknown user')
+                return None
+            
+            # Verify jwt with user password hash
+            payload = jwt.decode(jwt_token, self._get_user_jwt_key(user.password), ['HS256'])
             return User(payload['user_id'], payload['name'], '')
         except jwt.exceptions.InvalidTokenError:
             logger.debug('verify_token token invalid', exc_info=1)
+            return None
+        except TypeError:
             return None
 
     def _generate_access_token(self, user: User) -> str:
@@ -77,7 +88,7 @@ class UserController:
             'iat': timestamp(),
             'exp': timestamp()+days_to_seconds(14)
         }
-        return jwt.encode(jwt_payload, self._jwt_key, algorithm='HS256')
+        return jwt.encode(jwt_payload, self._get_user_jwt_key(user.password), algorithm='HS256')
 
     def _generate_refresh_token(self, user: User) -> str:
         jwt_payload = {
@@ -87,8 +98,11 @@ class UserController:
             'iat': timestamp(),
             'exp': timestamp()+days_to_seconds(30)
         }
-        return jwt.encode(jwt_payload, self._jwt_key, algorithm='HS256')
+        return jwt.encode(jwt_payload, self._get_user_jwt_key(user.password), algorithm='HS256')
     
+    def _get_user_jwt_key(self, user_hash: str) -> str:
+        return self._jwt_key + user_hash
+
     def refresh_token(self, jwt_token: str) -> tuple[str, str] | None:
         """Refresh access token using a refresh token"""
         if len(jwt_token) == 0:

@@ -57,13 +57,8 @@ def require_login(func):
         if t_user is None:
             logger.debug('@require_login access token invalid')
             return redirect(url_for('logout'))
-        # Get user from db and verify the name
-        v_user = user._user.get(t_user.user_id)
-        if v_user is None or v_user.name != t_user.name:
-            logger.debug('@require_login token user not match db record')
-            return redirect(url_for('logout'))
         
-        g.user_id = v_user.user_id
+        g.user_id = t_user.user_id
         logger.debug('@require_login user ok')
         return func(*args, **kwargs)
     return decorated_function
