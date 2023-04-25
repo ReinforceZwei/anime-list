@@ -106,23 +106,33 @@ def login():
     elif request.method == 'POST':
         name = request.form.get('name', '')
         password = request.form.get('password', '')
+        remember_me = request.form.get('remember_me', False)
         new_tokens = user.authenticate(name, password)
         if new_tokens is not None:
             # Token valid
             access, refresh = new_tokens
             response = make_response(redirect(url_for('index')))
-            response.set_cookie(
-                '__access_token',
-                access,
-                expires=timestamp()+days_to_seconds(14),
-                httponly=True,
-                samesite='strict')
-            response.set_cookie(
-                '__refresh_token',
-                refresh,
-                expires=timestamp()+days_to_seconds(30),
-                httponly=True,
-                samesite='strict')
+            if remember_me:
+                # Keep login
+                response.set_cookie(
+                    '__access_token',
+                    access,
+                    expires=timestamp()+days_to_seconds(14),
+                    httponly=True,
+                    samesite='strict')
+                response.set_cookie(
+                    '__refresh_token',
+                    refresh,
+                    expires=timestamp()+days_to_seconds(30),
+                    httponly=True,
+                    samesite='strict')
+            else:
+                # Session cookie
+                response.set_cookie(
+                    '__access_token',
+                    access,
+                    httponly=True,
+                    samesite='strict')
             # Redirect to index
             return response
         else:
