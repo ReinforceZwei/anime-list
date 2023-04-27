@@ -406,6 +406,13 @@ function deleteAccount(){
 }
 function confirmDeleteAccount(){
     let password = $('#confim-delete-password').val()
+    $.post('delete_account', {'password': password}, e => {
+        alert('你的帳號已刪除')
+        location.reload()
+    })
+    .fail(() => {
+        alert('密碼不正確')
+    })
 }
 //for view and other function
 
@@ -631,10 +638,17 @@ $(document).ready(function () {
     onDataLoad();
 
     $('#changePassword').on('submit', e => {
+        console.log('fire change password on submit')
         e.preventDefault();
-        let old_password = $('#password_old')
-        let new_password = $('#password_new')
-        alert('Not supported')
+        let old_password = $('#password_old').val()
+        let new_password = $('#password_new').val()
+        $.post('change_password', {password_old: old_password, password_new: new_password}, e => {
+            alert('已修改密碼。請重新登入')
+            location.reload()
+        })
+        .fail(() => {
+            alert('密碼不正確')
+        })
     })
 
     // Caching is removed

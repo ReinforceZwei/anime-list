@@ -2,7 +2,7 @@ import dataclasses
 import jwt
 import secrets
 from model import Anime, User, AnimeModel, UserModel
-from utils import timestamp, days_to_seconds
+from utils import timestamp, days_to_seconds, verify_password, set_password
 from log import logger
 
 class AnimeController:
@@ -132,3 +132,10 @@ class UserController:
     
     def delete(self, id: int) -> bool:
         return self._user.delete(id)
+    
+    def change_password(self, id: int, old_password: str, new_password: str) -> bool:
+        user = self._user.get(id)
+        if user is not None:
+            if verify_password(old_password, user.password):
+                return self._user.update_password(id, new_password)
+        return False

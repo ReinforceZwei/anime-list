@@ -280,6 +280,16 @@ def delete_account():
     else:
         return '', 400
 
+@app.post('/change_password')
+@require_login
+def change_password():
+    old_password = request.form.get('password_old')
+    new_password = request.form.get('password_new')
+    if user.change_password(g.user_id, old_password, new_password):
+        return '', 200
+    else:
+        return '', 400
+
 if __name__ == "__main__":
     if config.debug:
         app.debug = True

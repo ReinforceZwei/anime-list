@@ -190,6 +190,14 @@ class UserModel(Model):
         else:
             return None
     
+    def update_password(self, user_id: int, password: str) -> bool:
+        if self.get(user_id) is not None:
+            sql = "UPDATE user SET password = %s WHERE id = %s"
+            pwhash = set_password(password)
+            return self._execute(sql, (pwhash, user_id)) is not None
+        else:
+            return False
+
     def delete(self, user_id: int) -> bool:
         sql = "DELETE FROM user WHERE id = %s"
         return self._execute(sql, (user_id,)) is not None
