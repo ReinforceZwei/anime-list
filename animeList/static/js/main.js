@@ -148,11 +148,17 @@ function editInfo(anime) {
     t.remark = $("#editPanel #remark");
     t.tags = $("#editPanel #tags");
     t.save = $("#editPanel #saveButtom");
+    t.delete = $("#editPanel #deleteButtom");
 
     t.save.off('click');
     t.save.click(function () {
         _saveInfo(anime.animeID, anime)
     });
+
+    t.delete.off('click');
+    t.delete.click(() => {
+        _deleteAnime(anime.animeID, anime)
+    })
 
     let _watchedTime;
     let _addedTime = (new Date(anime.addedTime * 1000)).toLocaleString();
@@ -229,6 +235,19 @@ function saveInfo(anime, original) {
         showInfo(original);
         updateItem(original);
     });
+}
+
+function _deleteAnime(animeID, anime) {
+    if (confirm(`確定要永久刪除「${anime.animeName}」?`)){
+        $.post('delete/'+animeID, e => {
+            closeEditPanel();
+            closeInfoPanel();
+            $('#id-'+animeID).parent().remove();
+        })
+        .fail(() => {
+            alert('刪除失敗')
+        })
+    }
 }
 
 function _search() {
@@ -378,6 +397,16 @@ function updateItem(anime){
     item[0].children[0].innerText = anime.remark ? `（${anime.remark}）` : '';
     item[0].setAttribute('class', className)
 }
+function deleteAccount(){
+    let count = $('#animeListContainer li a').length
+    if (confirm(`確定要永遠刪除${count}個記錄和你的帳號嗎?\n此動作無法復原`)){
+        $('#deleteAccount').modal()
+        // TODO: Ask for user password
+    }
+}
+function confirmDeleteAccount(){
+    let password = $('#confim-delete-password').val()
+}
 //for view and other function
 
 function closeInfoPanel() {
@@ -442,6 +471,9 @@ function toggleDropdown() {
     $('.dropdown__item').each(function (i, el) {
       	$(el).css('--n', i + 1);
     });
+}
+function openSettingModal() {
+    $('#settings').modal()
 }
 
 function copyNameToClipboard() {
@@ -597,6 +629,14 @@ $(document).ready(function () {
 
     makeSearchCache()
     onDataLoad();
+
+    $('#changePassword').on('submit', e => {
+        e.preventDefault();
+        let old_password = $('#password_old')
+        let new_password = $('#password_new')
+        alert('Not supported')
+    })
+
     // Caching is removed
     indexedDB.deleteDatabase('AnimeDB');
 });

@@ -34,6 +34,9 @@ class AnimeController:
 
         return self._anime.update(user_id, id, _values)
     
+    def delete(self, user_id: int, id: int) -> bool:
+        return self._anime.delete(user_id, id)
+
     def last_modify(self, user_id: int) -> int:
         return self._anime.last_modify(user_id)
 
@@ -126,3 +129,6 @@ class UserController:
         if len(name) == 0 or len(name) > 100 or len(password) == 0:
             return False
         return self._user.add(name, password) is not None
+    
+    def delete(self, id: int) -> bool:
+        return self._user.delete(id)

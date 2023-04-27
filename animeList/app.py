@@ -59,6 +59,7 @@ def require_login(func):
             return redirect(url_for('logout'))
         
         g.user_id = t_user.user_id
+        g.name = t_user.name
         logger.debug('@require_login user ok')
         return func(*args, **kwargs)
     return decorated_function
@@ -263,6 +264,21 @@ def import_data():
         # Never reach
         return redirect(url_for('login'))
 
+@app.post('/delete/<int:id>')
+@require_login
+def delete(id: int):
+    anime.delete(g.user_id, id)
+    return '', 200
+
+@app.post('/delete_account')
+@require_login
+def delete_account():
+    password = request.form.get('password', '')
+    if user.authenticate(g.name, password) is not None:
+        user.delete(g.user_id)
+        return redirect(url_for('logout'))
+    else:
+        return '', 400
 
 if __name__ == "__main__":
     if config.debug:

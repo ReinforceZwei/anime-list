@@ -7,6 +7,7 @@
         <title>琳的動漫清單</title>
         <script src="static/js/jquery.js"></script>
         <script src="static/js/rateit/jquery.rateit.min.js"></script>
+        <script src="static/js/jquery.modal.min.js"></script>
         <link href="static/js/rateit/rateit.css" rel="stylesheet" type="text/css">
         <link rel="manifest" href="static/manifest.json">
         <link rel="shortcut icon" sizes="500x500" href="static/css/data/Anime-round-min.png">
@@ -15,6 +16,16 @@
         <link href="static/css/main.css" rel="stylesheet" type="text/css">
         <link href="static/css/dark.css" rel="stylesheet alternate" type="text/css" id="darkMode">
         <link href="static/css/fontello.css" rel="stylesheet" type="text/css">
+        <link href="static/css/jquery.modal.min.css" rel="stylesheet">
+        <style>
+            .jquery-modal.blocker.current {
+                /* Default backdrop is too dark */
+                background-color: rgba(0,0,0,0.5);
+            }
+            .jquery-modal.blocker.current .modal {
+                background-color: var(--sheet-background);
+            }
+        </style>
         
         <!-- iOS startup screen -->
         <link rel="apple-touch-startup-image" href="static/css/data/slash/apple-splash-2048-2732.jpg" media="(device-width: 1024px) and (device-height: 1366px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)">
@@ -108,6 +119,9 @@
                 </div>
                 <div class="dropdown__item dropdown__button" title="Dark Mode">
                     <div onclick="toggleDarkMode()"><i class="icon-moon-inv"></i></div>
+                </div>
+                <div class="dropdown__item dropdown__button" title="Settings">
+                    <div onclick="openSettingModal()"><i class="icon-cog"></i></div>
                 </div>
                 <div class="dropdown__item dropdown__button" title="Import Data">
                     <a href="{{url_for('import_data')}}"><i class="icon-upload"></i></a>
@@ -255,9 +269,38 @@
                     <td><span id="watchedTime"></span></td>
                 </tr>
                 <tr>
-                    <td colspan="2" class="center"><span id="saveButtom" class="pointer">儲存</span></td>
+                    <td colspan="2" class="center">
+                        <div class="button-container">
+                            <span id="deleteButtom" class="pointer red-text"><i class="icon-trash"></i>刪除</span>
+                            <span id="saveButtom" class="pointer"><i class="icon-ok"></i>儲存</span>
+                        </div>
+                    </td>
                 </tr>
             </table>
+        </div>
+        <div class="modal" id="settings">
+            <h3>帳號</h3>
+            <p>
+                <div>
+                    修改密碼
+                    <form id="changePassword">
+                        <div><input id="password_old" name="password_old" type="password" placeholder="Old Password"></div>
+                        <div><input id="password_new" name="password_new" type="password" placeholder="New Password"></div>
+                        <input type="submit" value="Confirm" class="pointer">
+                    </form>
+                </div>
+            </p>
+            <hr>
+            <p>
+                <a onclick="deleteAccount()" class="pointer red-text"><i class="icon-trash"></i>刪除我的帳號</a>
+            </p>
+        </div>
+        <div class="modal" id="deleteAccount">
+            <h3 class="red-text">輸入密碼來確認刪除</h3>
+            <p>
+                <input id="confim-delete-password" type="password">
+                <a onclick="confirmDeleteAccount()" class="pointer red-text"><i class="icon-trash"></i>確定刪除</a>
+            </p>
         </div>
     </body>
 </html>
