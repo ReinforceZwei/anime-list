@@ -50,10 +50,10 @@ class Anime:
 
 class Model:
     def __init__(self, database: AnimeDatabase) -> None:
-        self._con = database.get_connection()
+        self._db = database
 
     def _execute(self, query: str, args=None) -> dict | tuple:
-        c = self._con.cursor()
+        c = self._db.get_connection().cursor()
         try:
             logger.debug("Execute query '%s', %s", query, args)
             rows = c.execute(query, args)
