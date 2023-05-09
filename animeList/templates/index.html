@@ -68,10 +68,10 @@
             <div class="search">
                 <div class="search__container">
                     <div class="search__bar">
-                        <input type="text" class="search__input" placeholder="搜尋" id="searchInput">
-                        <!-- <span class="search__button" onclick="_search()">
-                            &#128270;
-                        </span> -->
+                        <form autocomplete="off">
+                            <input type="text" class="search__input" placeholder="搜尋" id="searchInput" autocomplete="off">
+                            <span class="focus-border"></span>
+                        </form>
                     </div>
                     <div class="search__toggle" onclick="toggleSearchBar()">
                         <div class="magnifier">
@@ -285,7 +285,7 @@
                     修改密碼
                     <form id="changePassword">
                         <div><input id="password_old" name="password_old" type="password" placeholder="Old Password"></div>
-                        <div><input id="password_new" name="password_new" type="password" placeholder="New Password"></div>
+                        <div><input id="password_new" name="password_new" type="password" placeholder="New Password" autocomplete="new-password"></div>
                         <input type="submit" value="Confirm" class="pointer">
                     </form>
                 </div>

@@ -235,17 +235,38 @@ td {
     display: flex;
     flex-wrap: nowrap;
     align-content: end;
+    justify-content: center;
     padding: 5px;
     flex-grow: 1;
+}
+.search__bar form {
+    display: flex;
+    position: relative;
+    width: 100%;
 }
 .search__bar input[type="text"] {
     background: transparent;
     border: none;
-    border-bottom: 1px solid black;
+    border-bottom: 1px solid #b1b1b1;
     padding-top: 15px;
     font-size: medium;
     width: 100%;
-    margin-left: 20px;
+}
+.search__bar input[type="text"]:focus {
+    outline: none;
+}
+.search__bar input[type="text"] ~ .focus-border {
+    position: absolute;
+    bottom: 0; 
+    left: 0;
+    width: 0;
+    height: 2px;
+    background-color: black;
+    transition: 0.4s;
+}
+.search__bar input[type="text"]:focus ~ .focus-border {
+    width: 100%;
+    transition: 0.4s;
 }
 .search__result {
     display: none;

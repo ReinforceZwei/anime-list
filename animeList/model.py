@@ -53,7 +53,8 @@ class Model:
         self._db = database
 
     def _execute(self, query: str, args=None) -> dict | tuple:
-        c = self._db.get_connection().cursor()
+        self._con = self._db.get_connection()
+        c = self._con.cursor()
         try:
             logger.debug("Execute query '%s', %s", query, args)
             rows = c.execute(query, args)
