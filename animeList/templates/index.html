@@ -4,7 +4,7 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
         <meta name="apple-mobile-web-app-capable" content="yes" />
-        <title>琳的動漫清單</title>
+        <title>{{title}}</title>
         <script src="static/js/jquery.js"></script>
         <script src="static/js/rateit/jquery.rateit.min.js"></script>
         <script src="static/js/jquery.modal.min.js"></script>
@@ -85,8 +85,8 @@
         <div class="warpper"></div>
         <div>
             <div id="animeListContainer">
-                <h1>琳的動漫清單</h1>
-                <div class="subtitle">已看^^</div>
+                <h1>{{title}}</h1>
+                <div class="subtitle">{{title_watched}}</div>
                 <ol class="animeList" id="list-watched">
                     {% for a in watched %}
                     <li>
@@ -94,7 +94,7 @@
                     </li>
                     {% endfor %}
                 </ol>
-                <div class="subtitle">想看><</div>
+                <div class="subtitle">{{title_unwatched}}</div>
                 <ol class="animeList" id="list-unwatched">
                     {% for a in unwatched %}
                     <li>
@@ -279,6 +279,30 @@
             </table>
         </div>
         <div class="modal" id="settings">
+            <h3>個人化</h3>
+            <p>
+                <div class="personal">
+                    <div class="personal__item">
+                        <span class="personal__item_name">標題</span>
+                        <span><input type="text" id="personal_title"></span>
+                    </div>
+                    <div class="personal__item">
+                        <span class="personal__item_name">已觀看清單</span>
+                        <span><input type="text" id="personal_watched"></span>
+                    </div>
+                    <div class="personal__item">
+                        <span class="personal__item_name">未觀看清單</span>
+                        <span><input type="text" id="personal_unwatched"></span>
+                    </div>
+                </div>
+                <a onclick="saveSetting()" class="pointer"><i class="icon-ok"></i>儲存</a>
+            </p>
+            <hr>
+            <h3>資料</h3>
+            <p>
+                <a href="{{url_for('import_data')}}" class="pointer"><i class="icon-upload"></i>匯入資料</a>
+            </p>
+            <hr>
             <h3>帳號</h3>
             <p>
                 <div>

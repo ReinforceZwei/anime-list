@@ -414,6 +414,22 @@ function confirmDeleteAccount(){
         alert('密碼不正確')
     })
 }
+function saveSetting(){
+    let title = $('#personal_title').val()
+    let watched = $('#personal_watched').val()
+    let unwatched = $('#personal_unwatched').val()
+    let data = {
+        'title': title,
+        'title_watched': watched,
+        'title_unwatched': unwatched,
+    }
+    $.post('setting', data, e => {
+        location.reload()
+    })
+    .fail(() => {
+        alert('Cannot save setting')
+    })
+}
 //for view and other function
 
 function closeInfoPanel() {
@@ -649,6 +665,16 @@ $(document).ready(function () {
         .fail(() => {
             alert('密碼不正確')
         })
+    })
+
+    $.get('setting', e => {
+        // TODO:
+        $('#personal_title').val(e.title)
+        $('#personal_watched').val(e.title_watched)
+        $('#personal_unwatched').val(e.title_unwatched)
+    })
+    .fail(() => {
+        alert("Cannot get user settings from server")
     })
 
     // Caching is removed

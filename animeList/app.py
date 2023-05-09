@@ -1,9 +1,10 @@
+from dataclasses import asdict
 from flask import Flask, render_template, redirect, request, url_for, g, make_response
 from functools import wraps
 import json
 from config import AppConfig
 from database import AnimeDatabase
-from model import AnimeModel, UserModel
+from model import AnimeModel, UserModel, UserSetting
 from controller import AnimeController, UserController
 from utils import timestamp, days_to_seconds
 from middleware import PrefixMiddleware
@@ -27,13 +28,19 @@ db = AnimeDatabase(
 anime_db = AnimeModel(db)
 user_db = UserModel(db)
 anime = AnimeController(anime_db)
-user = UserController(user_db, config.secret_key)
+_user_setting = UserSetting(0, config.app_name, "Watched Animes", "To watch")
+user = UserController(user_db, _user_setting, config.secret_key)
 
 app = Flask(__name__)
 
 if config.prefix_path != "":
     app.config['APPLICATION_ROOT'] = config.prefix_path
     app.wsgi_app = PrefixMiddleware(app.wsgi_app, prefix=config.prefix_path)
+
+@app.context_processor
+def inject_app_info():
+    # Make app_name variable available for all templates
+    return dict(app_name=config.app_name)
 
 # App routes:
 # GET / -> index
@@ -170,6 +177,7 @@ def new_user():
 def index():
     watched = anime._anime.get_watched_sorted(g.user_id)
     unwatched = anime._anime.get_unwatched_sorted(g.user_id)
+    setting = user.get_setting(g.user_id)
     for i in watched:
         css_class = []
         if i.downloaded:
@@ -188,7 +196,7 @@ def index():
         if i.remark:
             i.remark = '（{}）'.format(i.remark)
         i._css_class = ', '.join(css_class)
-    return render_template('index.html', watched=watched, unwatched=unwatched)
+    return render_template('index.html', watched=watched, unwatched=unwatched, **asdict(setting))
 
 @app.get('/get')
 @require_login
@@ -289,6 +297,22 @@ def change_password():
         return '', 200
     else:
         return '', 400
+
+@app.route('/setting', methods=['GET', 'POST'])
+@require_login
+def setting():
+    if request.method == 'GET':
+        setting = user.get_setting(g.user_id)
+        if setting is not None:
+            return asdict(setting)
+        else:
+            return '', 404
+    elif request.method == 'POST':
+        if user.update_setting(g.user_id, request.form.to_dict()):
+            return '', 200
+        else:
+            return '', 500
+
 
 if __name__ == "__main__":
     if config.debug:

@@ -1,7 +1,7 @@
 import dataclasses
 import jwt
 import secrets
-from model import Anime, User, AnimeModel, UserModel
+from model import Anime, User, AnimeModel, UserModel, UserSetting
 from utils import timestamp, days_to_seconds, verify_password, set_password
 from log import logger
 
@@ -41,8 +41,9 @@ class AnimeController:
         return self._anime.last_modify(user_id)
 
 class UserController:
-    def __init__(self, user_model: UserModel, jwt_key: str = "") -> None:
+    def __init__(self, user_model: UserModel, default_user_setting: UserSetting, jwt_key: str = "") -> None:
         self._user = user_model
+        self._default_setting = default_user_setting
         self._jwt_key = jwt_key
         if self._jwt_key == "":
             self._jwt_key = secrets.token_urlsafe(16)
@@ -128,7 +129,11 @@ class UserController:
     def new_user(self, name: str, password: str) -> bool:
         if len(name) == 0 or len(name) > 100 or len(password) == 0:
             return False
-        return self._user.add(name, password) is not None
+        user = self._user.add(name, password)
+        if user is not None:
+            return self._user.new_setting(user.user_id, self._default_setting)
+        else:
+            return False
     
     def delete(self, id: int) -> bool:
         return self._user.delete(id)
@@ -139,3 +144,16 @@ class UserController:
             if verify_password(old_password, user.password):
                 return self._user.update_password(id, new_password)
         return False
+    
+    def get_setting(self, id: int) -> UserSetting | None:
+        return self._user.get_setting(id)
+    
+    def update_setting(self, id: int, values: dict[str]) -> bool:
+        setting = self.get_setting(id)
+        if setting is not None:
+            setting.title = values.get('title', setting.title)
+            setting.title_watched = values.get('title_watched', setting.title_watched)
+            setting.title_unwatched = values.get('title_unwatched', setting.title_unwatched)
+            return self._user.update_setting(id, setting)
+        else:
+            return False

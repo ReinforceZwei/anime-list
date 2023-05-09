@@ -1,5 +1,5 @@
 import dataclasses
-from dataclasses import dataclass
+from dataclasses import dataclass, asdict
 from database import AnimeDatabase
 from log import logger
 from utils import set_password, verify_password, timestamp
@@ -11,6 +11,13 @@ class User:
     user_id: int
     name: str
     password: str
+
+@dataclass
+class UserSetting:
+    user_id: int
+    title: str
+    title_watched: str
+    title_unwatched: str
 
 @dataclass
 class Anime:
@@ -210,3 +217,25 @@ class UserModel(Model):
             return int(result[0]['count'])
         else:
             return -1
+    
+    def get_setting(self, user_id: int) -> UserSetting | None:
+        sql = "SELECT * FROM user_setting WHERE user_id = %s"
+        result = self._execute(sql, (user_id,))
+        if result is not None and len(result) == 1:
+            result = result[0]
+            return UserSetting(user_id, 
+                            result['title'], 
+                            result['title_watched'], 
+                            result['title_unwatched'])
+        else:
+            return None
+    
+    def update_setting(self, user_id: int, setting: UserSetting) -> bool:
+        sql = "UPDATE user_setting SET title = %(title)s, title_watched = %(title_watched)s, title_unwatched = %(title_unwatched)s WHERE user_id = %(user_id)s"
+        setting.user_id = user_id
+        return self._execute(sql, asdict(setting)) is not None
+    
+    def new_setting(self, user_id: int, setting: UserSetting) -> bool:
+        sql = "INSERT INTO user_setting VALUES(%(user_id)s,%(title)s,%(title_watched)s,%(title_unwatched)s)"
+        setting.user_id = user_id
+        return self._execute(sql, asdict(setting)) is not None

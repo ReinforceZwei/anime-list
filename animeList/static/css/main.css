@@ -479,3 +479,20 @@ td {
     background-color: #0b5ed7;
     border-color: #0a58ca;
 }
+
+/* Setting Modal */
+.personal {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    flex-direction: row;
+}
+.personal__item {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    flex-direction: row;
+}
+.personal__item_name {
+    width: 100px;
+}

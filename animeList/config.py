@@ -12,6 +12,7 @@ class AppConfig:
     db_name: str
     port: int
     secret_key: str
+    app_name: str
     prefix_path: str
     
     @staticmethod
@@ -25,6 +26,7 @@ class AppConfig:
             db_name = "animelist",
             port = 5000,
             secret_key = "",
+            app_name = "Anime List",
             prefix_path = "",
         )
     
@@ -40,6 +42,7 @@ class AppConfig:
             db_name = os.getenv("DB_NAME", "animelist"),
             port = os.getenv("PORT", 5000),
             secret_key = os.getenv("SECRET_KEY", ""),
+            app_name = os.getenv("APP_NAME", "Anime List"),
             prefix_path = os.getenv("PREFIX_PATH", "")
         )
 
