@@ -1,5 +1,6 @@
 from dataclasses import asdict
-from flask import Flask, render_template, redirect, request, url_for, g, make_response
+from datetime import datetime
+from flask import Flask, Response, render_template, redirect, request, url_for, g, make_response
 from functools import wraps
 import json
 from config import AppConfig
@@ -271,6 +272,20 @@ def import_data():
     else:
         # Never reach
         return redirect(url_for('login'))
+
+@app.get('/export_data')
+@require_login
+def export_data():
+    result = anime.get_all(g.user_id)
+    result = [x.to_client_dict() for x in result]
+    json_str = json.dumps(result, ensure_ascii=False)
+    file_name = 'animelist-export-{}'.format(datetime.now().strftime("%Y%m%d-%H%M"))
+    return Response(
+        json_str,
+        mimetype='application/json',
+        headers={
+            'Content-Disposition':'attachment;filename={}.json'.format(file_name)
+        })
 
 @app.post('/delete/<int:id>')
 @require_login
