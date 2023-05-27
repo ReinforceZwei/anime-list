@@ -26,6 +26,12 @@
                     <div class="hint">{{ hint }}</div>
                     <input type="submit" value="Login" class="loginBtn">
                 </form>
+                {% if allow_register: %}
+                <hr>
+                <div style="text-align: center;">
+                    <a href="{{url_for('new_user')}}">建立帳號</a>
+                </div>
+                {% endif %}
             </div>
         </body>
     </body>

@@ -40,7 +40,7 @@ if config.prefix_path != "":
 @app.context_processor
 def inject_app_info():
     # Make app_name variable available for all templates
-    return dict(app_name=config.app_name)
+    return dict(app_name=config.app_name, allow_register=config.allow_register)
 
 # App routes:
 # GET / -> index
@@ -157,7 +157,7 @@ def logout():
 
 @app.route('/new_user', methods=['GET', 'POST'])
 def new_user():
-    if user._user.app_user_count() > 0:
+    if user._user.app_user_count() > 0 and not config.allow_register:
         return redirect(url_for('login'))
     if request.method == 'GET':
         return render_template('new_user.html')

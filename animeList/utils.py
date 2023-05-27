@@ -16,3 +16,6 @@ def timestamp() -> int:
 
 def days_to_seconds(days: int) -> int:
     return days * 86400
+
+def str2bool(x: str) -> bool:
+    return str(x).lower() in ("true", "t", "1")

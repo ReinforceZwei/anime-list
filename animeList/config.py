@@ -1,6 +1,7 @@
 import os
 from dataclasses import dataclass, asdict
 from dotenv import load_dotenv
+from utils import str2bool
 
 @dataclass
 class AppConfig:
@@ -14,6 +15,7 @@ class AppConfig:
     secret_key: str
     app_name: str
     prefix_path: str
+    allow_register: bool
     
     @staticmethod
     def from_default():
@@ -28,13 +30,14 @@ class AppConfig:
             secret_key = "",
             app_name = "Anime List",
             prefix_path = "",
+            allow_register = False,
         )
     
     @staticmethod
     def from_env():
         load_dotenv()
         return AppConfig(
-            debug = os.getenv("DEBUG", False),
+            debug = str2bool(os.getenv("DEBUG", False)),
             db_host = os.getenv("DB_HOST", ""),
             db_port = int(os.getenv("DB_PORT", 3306)),
             db_user = os.getenv("DB_USER", ""),
@@ -43,7 +46,8 @@ class AppConfig:
             port = os.getenv("PORT", 5000),
             secret_key = os.getenv("SECRET_KEY", ""),
             app_name = os.getenv("APP_NAME", "Anime List"),
-            prefix_path = os.getenv("PREFIX_PATH", "")
+            prefix_path = os.getenv("PREFIX_PATH", ""),
+            allow_register = str2bool(os.getenv("ALLOW_REGISTER", False))
         )
 
     @staticmethod
