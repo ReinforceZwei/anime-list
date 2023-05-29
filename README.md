@@ -1,12 +1,16 @@
 # 動漫列表 / Anime List
 
+<img align="right" height="128px" width="128px" src="animeList/static/css/data/Anime-round-min.png">
+
 Record your own anime watch list, focusing on simplicity. No too much fancy features.
 
 This project is a rewrite version of my personal version, originally written in php. That is how I learn php and html, so you can imagine how messy is it. You can still see the messy frontend code with all javascript functions squeezed in a single `main.js` file.
 
 ## Try it out
 
-If you want to try this app, great. You can host it yourself.
+If you want to try this app, great. A demo instance is available at [anime.saku.moe](https://anime.saku.moe/). Login with `demo/demo` or create a new account.
+
+Or you can host it yourself.
 
 ### Docker compose
 
