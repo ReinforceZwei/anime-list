@@ -56,7 +56,7 @@ def inject_app_info():
 def require_login(func):
     @wraps(func)
     def decorated_function(*args, **kwargs):
-        access_token = request.cookies.get('__access_token', '')
+        access_token = request.cookies.get('animelist_access_token', '')
         if access_token == "":
             logger.debug('@require_login access token empty')
             return redirect(url_for('logout'))
@@ -79,14 +79,14 @@ def login():
         if user._user.app_user_count() == 0:
             return redirect(url_for('new_user'))
         # Check access token
-        access_token = request.cookies.get('__access_token', '')
+        access_token = request.cookies.get('animelist_access_token', '')
         if access_token != '':
             logger.debug('/login check access token %s', access_token)
             if user.verify_token(access_token) is not None:
                 logger.debug('/login access token ok')
                 return redirect(url_for('index'))
         # Check refresh token
-        refresh_token = request.cookies.get('__refresh_token', '')
+        refresh_token = request.cookies.get('animelist_refresh_token', '')
         if refresh_token != '':
             logger.debug('/login check refresh token %s', refresh_token)
             new_tokens = user.refresh_token(refresh_token)
@@ -96,13 +96,13 @@ def login():
                 access, refresh = new_tokens
                 response = make_response(redirect(url_for('index')))
                 response.set_cookie(
-                    '__access_token',
+                    'animelist_access_token',
                     access,
                     expires=timestamp()+days_to_seconds(14),
                     httponly=True,
                     samesite='strict')
                 response.set_cookie(
-                    '__refresh_token',
+                    'animelist_refresh_token',
                     refresh,
                     expires=timestamp()+days_to_seconds(30),
                     httponly=True,
@@ -124,13 +124,13 @@ def login():
             if remember_me:
                 # Keep login
                 response.set_cookie(
-                    '__access_token',
+                    'animelist_access_token',
                     access,
                     expires=timestamp()+days_to_seconds(14),
                     httponly=True,
                     samesite='strict')
                 response.set_cookie(
-                    '__refresh_token',
+                    'animelist_refresh_token',
                     refresh,
                     expires=timestamp()+days_to_seconds(30),
                     httponly=True,
@@ -138,7 +138,7 @@ def login():
             else:
                 # Session cookie
                 response.set_cookie(
-                    '__access_token',
+                    'animelist_access_token',
                     access,
                     httponly=True,
                     samesite='strict')
@@ -152,8 +152,8 @@ def login():
 def logout():
     # Doesn't require valid login. We always delete user cookies
     response = make_response(redirect(url_for('login')))
-    response.set_cookie('__access_token', '', expires=0)
-    response.set_cookie('__refresh_token', '', expires=0)
+    response.set_cookie('animelist_access_token', '', expires=0)
+    response.set_cookie('animelist_refresh_token', '', expires=0)
     return response
 
 @app.route('/new_user', methods=['GET', 'POST'])
