@@ -27,6 +27,9 @@ services:
       SECRET_KEY: "ChangeMeToo!"
     ports:
       - "5000:5000"
+    depends_on:
+      - db
+    restart: on-failure
   db:
     image: mariadb
     restart: always
