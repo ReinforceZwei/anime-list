@@ -107,7 +107,7 @@ class AnimeModel(Model):
             else:
                 field_sql.append("{} = {}".format(k, v))
 
-        field_sql = ", ".join(field_sql)
+        field_sql = ", ".join(field_sql).replace('%', '%%')
         sql = "UPDATE anime SET {field} WHERE user_id = %s AND id = %s".format(field = field_sql)
         return self._execute(sql, (user_id, id)) is not None
     
