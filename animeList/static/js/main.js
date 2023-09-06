@@ -509,7 +509,7 @@ function elevatorDown() {
         if (el.offset().top > currentViewport){
             $([document.documentElement, document.body]).animate({
                 scrollTop: el.offset().top
-            }, 1000)
+            }, 400)
             break
         }
     }
@@ -526,7 +526,7 @@ function elevatorUp() {
         if (el.offset().top < currentViewport){
             $([document.documentElement, document.body]).animate({
                 scrollTop: el.offset().top
-            }, 1000)
+            }, 400)
             break
         }
     }
