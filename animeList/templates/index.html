@@ -86,7 +86,7 @@
         <div>
             <div id="animeListContainer">
                 <h1>{{title}}</h1>
-                <div class="subtitle">{{title_watched}}</div>
+                <div class="subtitle elevator-marker">{{title_watched}}</div>
                 <ol class="animeList" id="list-watched">
                     {% for a in watched %}
                     <li>
@@ -94,19 +94,23 @@
                     </li>
                     {% endfor %}
                 </ol>
-                <div class="subtitle">{{title_unwatched}}</div>
+                <div class="subtitle elevator-marker">{{title_unwatched}}</div>
                 <ol class="animeList" id="list-unwatched">
                     {% for a in unwatched %}
                     <li>
                         <a onclick="getInfo(event, {{a.id}})" class="{{a._css_class}}" id="id-{{a.id}}">{{a.name}}<span class="remark">{{a.remark if a.remark}}</span></a>
                     </li>
                     {% endfor %}
-                    <a id="addAnime" onclick="_addAnime()">加新動漫</a>
+                    <a id="addAnime" class="elevator-marker" onclick="_addAnime()">加新動漫</a>
                 </ol>
             </div>
         </div>
         <div id="addAnimeFloat" onclick="_addAnime()">
             <div class="plus">+</div>
+        </div>
+        <div id="elevator-float">
+            <div onclick="elevatorUp()"><i class="icon-up-big"></i></div>
+            <div onclick="elevatorDown()"><i class="icon-down-big"></i></div>
         </div>
         <div class="dropdown">
             <div class="dropdown__content">

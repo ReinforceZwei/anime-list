@@ -498,6 +498,46 @@ function toggleDropdown() {
 function openSettingModal() {
     $('#settings').modal()
 }
+function elevatorDown() {
+    let currentViewport = $(window).scrollTop()
+    let markers = $('.elevator-marker')
+    for (let i = 0; i < markers.length; i++){
+        let el = $(markers[i])
+        // If element is visible, skip it
+        if (el.isInViewport())
+            continue
+        if (el.offset().top > currentViewport){
+            $([document.documentElement, document.body]).animate({
+                scrollTop: el.offset().top
+            }, 1000)
+            break
+        }
+    }
+}
+function elevatorUp() {
+    let currentViewport = $(window).scrollTop()
+    let markers = $('.elevator-marker')
+    // Reverse looping
+    for (let i = markers.length - 1; i >= 0; i--){
+        let el = $(markers[i])
+        // If element is visible, skip it
+        if (el.isInViewport())
+            continue
+        if (el.offset().top < currentViewport){
+            $([document.documentElement, document.body]).animate({
+                scrollTop: el.offset().top
+            }, 1000)
+            break
+        }
+    }
+}
+$.fn.isInViewport = function () {
+    let elementTop = $(this).offset().top;
+    let elementBottom = elementTop + $(this).outerHeight();
+    let viewportTop = $(window).scrollTop();
+    let viewportBottom = viewportTop + $(window).height();
+    return elementBottom > viewportTop && elementTop < viewportBottom;
+};
 
 function copyNameToClipboard() {
     var copyText = document.getElementById("animeName");
