@@ -1,30 +1,33 @@
 from datetime import datetime
-from typing import Optional
-from pydantic import BaseModel
-from .tag import Tag
-from .category import Category
+from typing import Optional, List
+from sqlmodel import SQLModel, Field, Relationship
+from .user import User
+#from .tag import Tag
+#from .category import Category
 
-# Base anime model
-class AnimeBase(BaseModel):
-    id: int
-    user_id: int
+# All required fields for creating record
+# Make it as base
+class AnimeBase(SQLModel):
     name: str
-    create_time: datetime
+    
+# Real table schema that will be created in database
+class Anime(AnimeBase, table=True):
+    id: int = Field(default=None, primary_key=True)
+    user: User = Relationship()
+    user_id: Optional[int] = Field(default=None, foreign_key="user.id")
+    create_time: datetime = Field(default_factory=datetime.now)
     watched_time: Optional[datetime]
-    downloaded: bool
-    watched: bool
+    downloaded: bool = Field(default=False)
+    watched: bool = Field(default=False)
     rating: Optional[int]
-    #comment: str
+    comment: Optional[str]
     url: Optional[str]
     remark: Optional[str]
     tmdb_id: Optional[str]
-    tags: list[Tag]
-    categories: list[Category]
+    #tags: List[Tag]
+    #categories: List[Category]
 
-# Anime model with comment
-class AnimeFull(AnimeBase):
-    comment: Optional[str]
-
-# Anime model for frontend listing (no need comment)
-class AnimeShort(AnimeBase):
+# Alias for base, used for create new record
+class AnimeCreate(AnimeBase):
     pass
+

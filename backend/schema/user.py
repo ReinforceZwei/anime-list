@@ -1,8 +1,13 @@
-from pydantic import BaseModel, Field
+from sqlmodel import SQLModel, Field, Relationship
 from datetime import datetime
 
-class User(BaseModel):
-    id: int
+class UserBase(SQLModel):
     name: str
-    password: str = Field(exclude=True)
-    create_time: datetime
+    password: str
+
+class User(UserBase, table=True):
+    id: int = Field(default=None, primary_key=True)
+    create_time: datetime = Field(default_factory=datetime.now)
+
+class UserCreate(UserBase):
+    pass
