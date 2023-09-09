@@ -1,5 +1,6 @@
 from sqlmodel import SQLModel, create_engine, Session, delete, select
 from schema.user import User, UserCreate
+from schema.category import Category
 from schema.anime import Anime
 
 sqlite_file_name = "database.db"
@@ -26,4 +27,10 @@ with Session(engine) as session:
 
     new_an2 = Anime(name='saga', user_id=1)
     session.add(new_an2)
+    session.commit()
+
+    ca = Category(name="School", user_id=1)
+    to_add = session.exec(select(Anime).where(Anime.id == 1)).first()
+    to_add.categories.append(ca)
+    session.add(to_add)
     session.commit()

@@ -3,7 +3,7 @@ from typing import Optional, List
 from sqlmodel import SQLModel, Field, Relationship
 from .user import User
 #from .tag import Tag
-#from .category import Category
+from .category import Category, AnimeCategory
 
 # All required fields for creating record
 # Make it as base
@@ -25,7 +25,7 @@ class Anime(AnimeBase, table=True):
     remark: Optional[str]
     tmdb_id: Optional[str]
     #tags: List[Tag]
-    #categories: List[Category]
+    categories: List[Category] = Relationship(link_model=AnimeCategory)
 
 # Alias for base, used for create new record
 class AnimeCreate(AnimeBase):
