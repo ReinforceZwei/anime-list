@@ -2,7 +2,7 @@ from datetime import datetime
 from typing import Optional, List
 from sqlmodel import SQLModel, Field, Relationship
 from .user import User
-#from .tag import Tag
+from .tag import Tag, AnimeTag
 from .category import Category, AnimeCategory
 
 # All required fields for creating record
@@ -24,7 +24,7 @@ class Anime(AnimeBase, table=True):
     url: Optional[str]
     remark: Optional[str]
     tmdb_id: Optional[str]
-    #tags: List[Tag]
+    tags: List[Tag] = Relationship(link_model=AnimeTag)
     categories: List[Category] = Relationship(link_model=AnimeCategory)
 
 # Alias for base, used for create new record

@@ -1,6 +1,10 @@
 from datetime import datetime
 from fastapi import FastAPI
 import database.model
+from core.config import settings
+
+print(settings.dict())
+
 
 app = FastAPI()
 
