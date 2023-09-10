@@ -1,5 +1,5 @@
 from sqlmodel import SQLModel, create_engine, Session, delete, select
-from schema.user import User, UserCreate
+from schema.user import User, UserCreate, UserSettings
 from schema.category import Category, AnimeCategory
 from schema.anime import Anime
 
@@ -12,14 +12,17 @@ SQLModel.metadata.create_all(engine)
 
 with Session(engine) as session:
     session.exec(delete(User))
+    session.exec(delete(UserSettings))
     session.exec(delete(Anime))
     session.exec(delete(Category))
     session.exec(delete(AnimeCategory))
     session.commit()
 
     me = User(name='reinforce', password='hehe')
+    s = UserSettings(user=me)
     an = Anime(name='oshi no ko', user=me)
     session.add(an)
+    session.add(s)
     session.commit()
 
     new_me = session.exec(select(User).where(User.id == 1)).first()

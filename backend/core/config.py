@@ -14,6 +14,10 @@ class Settings(BaseSettings):
     prefix_path: Optional[str]
     allow_register: bool = False
 
+    default_title: str = "我的動漫列表"
+    default_watched_title: str = "已看"
+    default_unwatched_title: str = "想看"
+
     class Config:
         env_file = '.env'
 

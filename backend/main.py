@@ -1,13 +1,18 @@
 from datetime import datetime
-from fastapi import FastAPI
+from fastapi import FastAPI, APIRouter
 import database.model
 from core.config import settings
 
-print(settings.dict())
+from router import user
 
+print(settings.dict())
 
 app = FastAPI()
 
+api = APIRouter(prefix='/api')
+api.include_router(user.router)
+
+app.include_router(api)
 
 @app.get("/")
 async def root():
