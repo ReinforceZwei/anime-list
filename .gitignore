@@ -161,3 +161,6 @@ cython_debug/
 
 # dotenv file
 .env
+
+# SQLite databases
+*.db

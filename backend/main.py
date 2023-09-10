@@ -1,6 +1,6 @@
 from datetime import datetime
 from fastapi import FastAPI, APIRouter
-import database.model
+import database.init
 from core.config import settings
 
 from router import user

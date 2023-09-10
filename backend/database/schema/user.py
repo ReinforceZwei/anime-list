@@ -21,6 +21,3 @@ class UserSettings(SQLModel, table=True):
 class UserCreate(UserBase):
     pass
 
-class UserRead(SQLModel):
-    id: int
-

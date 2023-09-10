@@ -1,11 +1,17 @@
-from fastapi import APIRouter
-from schema.user import UserCreate, UserRead, UserSettings
+from fastapi import APIRouter, Depends
+from typing import Annotated
+from sqlmodel import Session
+
+from dal.user import UserDao
+from model.user import UserLogin, UserRead, UserSettings
+from dependencies import db_session, user_dao
+
 
 router = APIRouter(prefix='/user')
 
 @router.post('/login')
-def login(user: UserCreate):
-    return user
+def login(user: UserLogin, user_dao: Annotated[UserDao, Depends(user_dao)]):
+    return user_dao.login(user)
 
 @router.get('/settings', response_model=UserSettings)
 def get_settings(user: UserRead):
