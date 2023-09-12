@@ -11,3 +11,11 @@ class UserDao:
     
     def login(self, user: UserLogin):
         return self._db.exec(select(User).where(User.name == user.name)).one()
+    
+    def create(self, user: User):
+        self._db.add(user)
+        self._db.commit()
+        return self._db.exec(select(User).where(User.name == user.name)).one()
+    
+    def get(self, user: User):
+        return self._db.exec(select(User).where(User.id == user.id)).one()

@@ -31,3 +31,21 @@ class Anime(AnimeBase, table=True):
 class AnimeCreate(AnimeBase):
     pass
 
+schema = """
+CREATE TABLE IF NOT EXISTS `anime` (
+    `id` int(5) NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    `user_id` int(5) NOT NULL,
+    `name` varchar(100) NOT NULL,
+    `added_time` DATETIME NOT NULL,
+    `watched_time` DATETIME NOT NULL,
+    `downloaded` BOOL NOT NULL DEFAULT FALSE,
+    `watched` BOOL NOT NULL DEFAULT FALSE,
+    `rating` int(3) NOT NULL DEFAULT 0,
+    `comment` text DEFAULT NULL,
+    `url` text DEFAULT NULL,
+    `remark` text DEFAULT NULL,
+    `tmdb_id` text DEFAULT NULL,
+    FOREIGN KEY(`user_id`) REFERENCES `user`(`id`) ON DELETE CASCADE,
+    UNIQUE KEY `name_uniq_id` (`user_id`,`name`)
+) CHARACTER SET = utf8mb4;
+"""

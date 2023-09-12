@@ -4,7 +4,7 @@ from datetime import datetime
 from core.config import settings
 
 class UserBase(SQLModel):
-    name: str
+    name: str = Field(unique=True)
     password: str
 
 class User(UserBase, table=True):
