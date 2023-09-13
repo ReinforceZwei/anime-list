@@ -1,11 +1,13 @@
 from datetime import datetime
 from fastapi import FastAPI, APIRouter
-import database.init
+
 from core.config import settings
 
 from router import user
 
 print(settings.dict())
+
+import database.init
 
 app = FastAPI()
 

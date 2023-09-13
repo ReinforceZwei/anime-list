@@ -1,40 +1,39 @@
-# Must be imported for schema to create in database
-from .schema import anime, user, category, tag
+import mysql.connector
+from mysql.connector import errorcode
+from .schame import schemas
+from core.config import settings
+from .connection import get_connection, set_database
 
+con = get_connection()
+cursor = con.cursor()
 
+def create_database(cursor):
+    try:
+        cursor.execute(
+            "CREATE DATABASE IF NOT EXISTS `{}` CHARACTER SET utf8mb4".format(settings.db_name))
+    except mysql.connector.Error as err:
+        print("Failed creating database: {}".format(err))
+        exit(1)
 
-# with Session(engine) as session:
-#     session.exec(delete(User))
-#     session.exec(delete(UserSettings))
-#     session.exec(delete(Anime))
-#     session.exec(delete(Category))
-#     session.exec(delete(AnimeCategory))
-#     session.commit()
+try:
+    cursor.execute("USE `{}`".format(settings.db_name))
+except mysql.connector.Error as err:
+    print("Database {} does not exists.".format(settings.db_name))
+    if err.errno == errorcode.ER_BAD_DB_ERROR:
+        create_database(cursor)
+        print("Database {} created successfully.".format(settings.db_name))
+        con.database = settings.db_name
+        cursor.execute("USE `{}`".format(settings.db_name))
+    else:
+        print(err)
+        exit(1)
 
-#     me = User(name='reinforce', password='hehe')
-#     s = UserSettings(user=me)
-#     an = Anime(name='oshi no ko', user=me)
-#     session.add(an)
-#     session.add(s)
-#     session.commit()
+set_database(settings.db_name)
 
-#     new_me = session.exec(select(User).where(User.id == 1)).first()
-#     new_an = Anime(name='nichijo', user=new_me)
-#     session.add(new_an)
-#     session.commit()
+for s in schemas:
+    cursor.execute(s)
 
-#     new_an2 = Anime(name='saga', user_id=1)
-#     session.add(new_an2)
-#     session.commit()
+cursor.close()
+con.close()
 
-#     ca = Category(name="School", user_id=1)
-#     to_add = session.exec(select(Anime).where(Anime.id == 1)).first()
-#     to_add.categories.append(ca)
-#     session.add(to_add)
-#     session.commit()
-
-#     session.refresh(new_an2)
-#     session.refresh(ca)
-#     new_an2.categories.append(ca)
-#     session.add(new_an2)
-#     session.commit()
+print('Database ready')
