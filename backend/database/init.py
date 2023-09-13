@@ -1,22 +1,7 @@
-from sqlmodel import SQLModel, create_engine, Session, delete, select
-from sqlalchemy.engine.url import URL
-
 # Must be imported for schema to create in database
 from .schema import anime, user, category, tag
 
 
-connect_url = URL.create(
-    drivername="sqlite",
-    username="",
-    password="",
-    host="",
-    port=None,
-    database="database.db",
-    query={}
-)
-engine = create_engine(connect_url, echo=True)
-
-SQLModel.metadata.create_all(engine)
 
 # with Session(engine) as session:
 #     session.exec(delete(User))

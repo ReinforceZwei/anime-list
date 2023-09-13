@@ -1,4 +1,4 @@
-from pydantic import BaseSettings
+from pydantic_settings import BaseSettings, SettingsConfigDict
 from typing import Optional
 
 class Settings(BaseSettings):
@@ -11,14 +11,13 @@ class Settings(BaseSettings):
     port: int = 5000
     secret_key: str = "ChangeMe!"
     app_name: str = "Anime List"
-    prefix_path: Optional[str]
+    prefix_path: Optional[str] = None
     allow_register: bool = False
 
     default_title: str = "我的動漫列表"
     default_watched_title: str = "已看"
     default_unwatched_title: str = "想看"
 
-    class Config:
-        env_file = '.env'
+    model_config = SettingsConfigDict(env_file='.env')
 
 settings = Settings()

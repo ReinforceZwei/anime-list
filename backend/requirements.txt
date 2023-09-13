@@ -1,2 +1,2 @@
 fastapi
-sqlmodel
+mysql-connector-python

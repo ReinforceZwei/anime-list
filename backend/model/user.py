@@ -1,11 +1,10 @@
 from pydantic import BaseModel
-from database.schema.user import UserBase, UserSettings
 
-class UserLogin(UserBase):
+class UserLogin(BaseModel):
     pass
 
 class UserRead(BaseModel):
     id: int
 
-class UserSettings(UserSettings):
+class UserSettings(BaseModel):
     pass

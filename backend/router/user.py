@@ -1,10 +1,8 @@
 from fastapi import APIRouter, Depends
 from typing import Annotated
-from sqlmodel import Session
 
 from dal.user import UserDao
 from model.user import UserLogin, UserRead, UserSettings
-from database.schema.user import User
 from dependencies import db_session, user_dao
 
 
@@ -15,7 +13,7 @@ def login(user: UserLogin, user_dao: Annotated[UserDao, Depends(user_dao)]):
     return user_dao.login(user)
 
 @router.post('/create')
-def create(user: User, user_dao: Annotated[UserDao, Depends(user_dao)]):
+def create(user: UserLogin, user_dao: Annotated[UserDao, Depends(user_dao)]):
     return user_dao.create(user)
 
 @router.get('/get')
