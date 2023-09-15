@@ -16,4 +16,6 @@ class UserDao(BaseDao):
         )
 
     def get_by_name(self, user: UserLogin):
-        pass
+        return User.model_validate(
+            self.exec('SELECT * FROM user WHERE name = %s', (user.name,)).fetchone()
+        )
