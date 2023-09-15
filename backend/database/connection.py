@@ -1,6 +1,7 @@
 from core.config import settings
 
 import mysql.connector
+from mysql.connector.pooling import PooledMySQLConnection
 
 con_pool = mysql.connector.pooling.MySQLConnectionPool(
     host=settings.db_host,
@@ -10,7 +11,7 @@ con_pool = mysql.connector.pooling.MySQLConnectionPool(
     autocommit=True
 )
 
-def get_connection():
+def get_connection() -> PooledMySQLConnection:
     return con_pool.get_connection()
 
 def set_database(name):
