@@ -3,15 +3,25 @@ from typing import Annotated
 
 from .base import BaseDao
 from database.connection import PooledMySQLConnection
-from model.anime import Anime, AnimeCreate, AnimeRead
+from model.anime import Anime, AnimeCreate, AnimeRead, AnimeUpdate
 from model.user import User
+from core.utils import generate_update_sql
 
 class AnimeDao(BaseDao):
-    def create(self, user: UserRead, anime: AnimeCreate):
-        id = self.exec('INSERT INTO anime(name, user_id) VALUES (%s, %s)', (anime.name, user.id)).lastrowid
-        return self.get(user, AnimeRead(id=id))
+    def create(self, user_id: int, anime: AnimeCreate):
+        id = self.exec('INSERT INTO anime(name, user_id) VALUES (%s, %s)', (anime.name, user_id)).lastrowid
+        return self.get(user_id, id)
     
-    def get(self, user: UserRead, anime: AnimeRead):
+    def get(self, user_id: int, anime_id: int):
+        # TODO: Also fetch tags and categories
         return Anime.model_validate(
-            self.exec('SELECT * FROM anime WHERE user_id = %s AND id = %s', (user.id, anime.id)).fetchone()
+            self.exec('SELECT * FROM anime WHERE user_id = %s AND id = %s', (user_id, anime_id)).fetchone()
         )
+    
+    def update(self, user_id: int, anime: AnimeUpdate):
+        anime_dict = anime.model_dump(exclude_none=True, exclude={'id'})
+        sql = generate_update_sql('anime', anime_dict, 'user_id = %s AND id = %s')
+        self.exec(sql, [*anime_dict, user_id, anime.id])
+    
+    def delete(self, user_id: int, anime_id: int):
+        self.exec('DELETE FROM anime WHERE user_id = %s AND id = %s', (user_id, anime_id))

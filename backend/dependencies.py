@@ -10,6 +10,7 @@ from model.user import User, UserRead, UserTokenPair, UserInfo
 
 from database.connection import get_connection, PooledMySQLConnection
 from dal.user import UserDao
+from dal.anime import AnimeDao
 from core.utils import decode_user_token_no_verify, decode_user_token
 
 oauth2_scheme = HTTPBearer()#OAuth2AuthorizationCodeBearer(tokenUrl="api/user/login", authorizationUrl="")
@@ -27,6 +28,9 @@ def db_session() -> PooledMySQLConnection:
 def user_dao(db: Annotated[PooledMySQLConnection, Depends(db_session)]):
     return UserDao(db)
 
+def anime_dao(db: Annotated[PooledMySQLConnection, Depends(db_session)]):
+    return AnimeDao(db)
+
 def get_current_user(token: Annotated[str, Depends(get_bearer)], user_dao: Annotated[UserDao, Depends(user_dao)]) -> User:
     error_unauthorized = HTTPException(401, "Unauthorized")
     try:
@@ -34,7 +38,7 @@ def get_current_user(token: Annotated[str, Depends(get_bearer)], user_dao: Annot
         if jwt_payload['sub'] != 'access':
             raise error_unauthorized
         unsafe_user = UserInfo.model_validate(jwt_payload)
-        db_user = user_dao.get(UserRead(id=unsafe_user.id))
+        db_user = user_dao.get(unsafe_user.id)
         if db_user.name == unsafe_user.name:
             # Verify JWT using user password
             decode_user_token(settings.secret_key, db_user.password, token)

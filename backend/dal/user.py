@@ -8,32 +8,32 @@ from core.utils import generate_update_sql
 from core.config import settings
 
 class UserDao(BaseDao):
-    def create(self, user: UserLogin):
-        user_id = self.exec('INSERT INTO user(name, password) VALUES (%s, %s)', (user.name, user.password)).lastrowid
+    def create(self, name: str, password_hash: str):
+        user_id = self.exec('INSERT INTO user(name, password) VALUES (%s, %s)', (name, password_hash)).lastrowid
         user_setting = [
             user_id,
             settings.default_title,
             settings.default_watched_title,
             settings.default_unwatched_title]
         self.exec('INSERT INTO user_setting VALUES(%s, %s, %s, %s)', user_setting)
-        return self.get(UserRead(id=user_id))
+        return self.get(user_id)
     
-    def get(self, user: UserRead) -> User:
+    def get(self, user_id: int) -> User:
         return User.model_validate(
-            self.exec('SELECT * FROM user WHERE id = %s', (user.id,)).fetchone()
+            self.exec('SELECT * FROM user WHERE id = %s', (user_id,)).fetchone()
         )
 
-    def get_by_name(self, user: UserLogin) -> User:
+    def get_by_name(self, name: str) -> User:
         return User.model_validate(
-            self.exec('SELECT * FROM user WHERE name = %s', (user.name,)).fetchone()
+            self.exec('SELECT * FROM user WHERE name = %s', (name,)).fetchone()
         )
     
-    def get_settings(self, user: UserRead) -> UserSettings:
+    def get_settings(self, user_id: int) -> UserSettings:
         return UserSettings.model_validate(
-            self.exec('SELECT * FROM user_setting WHERE user_id = %s', (user.id,)).fetchone()
+            self.exec('SELECT * FROM user_setting WHERE user_id = %s', (user_id,)).fetchone()
         )
     
-    def update_settings(self, user: UserRead, settings: UserSettingsUpdate):
+    def update_settings(self, user_id: int, settings: UserSettingsUpdate):
         settings_dict = settings.model_dump(exclude_none=True)
         sql = generate_update_sql('user_setting', settings_dict, 'user_id = %s')
-        self.exec(sql, [*settings_dict.values(), user.id])
+        self.exec(sql, [*settings_dict.values(), user_id])

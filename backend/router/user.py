@@ -5,7 +5,7 @@ from pydantic import ValidationError
 
 from dal.user import UserDao
 from model.user import User, UserLogin, UserRead, UserSettings, UserTokenPair, UserRefresh, UserInfo
-from dependencies import db_session, user_dao, get_current_user
+from dependencies import user_dao, get_current_user
 from core.utils import set_password, verify_password, generate_access_token, generate_refresh_token, decode_user_token_no_verify, decode_user_token
 from core.config import settings
 
@@ -19,17 +19,17 @@ router = APIRouter(prefix='/user', tags=['user'])
 
 @router.get('/details/{user_id}', response_model=UserInfo)
 def get(user_id: Annotated[int, Path()], user_dao: Annotated[UserDao, Depends(user_dao)]):
-    return UserInfo.model_validate(user_dao.get(UserRead(id=user_id)).model_dump())
+    return UserInfo.model_validate(user_dao.get(user_id).model_dump())
 
 @router.post('/create', response_model=UserInfo)
 def create(user: UserLogin, user_dao: Annotated[UserDao, Depends(user_dao)]):
     user.password = set_password(user.password)
-    db_user = user_dao.create(user)
+    db_user = user_dao.create(user.name, user.password)
     return UserInfo(id=db_user.id, name=db_user.name)
 
 @router.post('/login', response_model=UserTokenPair)
 def login(user: UserLogin, user_dao: Annotated[UserDao, Depends(user_dao)]):
-    if (db_user := user_dao.get_by_name(user)) is not None:
+    if (db_user := user_dao.get_by_name(user.name)) is not None:
         if verify_password(user.password, db_user.password):
             # Ok
             return UserTokenPair(
@@ -50,7 +50,7 @@ def refresh(user: UserRefresh, user_dao: Annotated[UserDao, Depends(user_dao)]):
         if jwt_payload['sub'] != 'refresh':
             raise error_unauthorized
         unsafe_user = User.model_validate(jwt_payload)
-        db_user = user_dao.get(UserRead(id=unsafe_user.id))
+        db_user = user_dao.get(unsafe_user.id)
         if db_user.name == unsafe_user.name:
             # Verify JWT using user password
             decode_user_token(settings.secret_key, db_user.password, user.refresh_token)
@@ -68,7 +68,7 @@ def refresh(user: UserRefresh, user_dao: Annotated[UserDao, Depends(user_dao)]):
 
 @router.get('/settings', response_model=UserSettings)
 def get_settings(user: Annotated[User, Depends(get_current_user)], user_dao: Annotated[UserDao, Depends(user_dao)]):
-    return user_dao.get_settings(UserRead(id=user.id))
+    return user_dao.get_settings(user.id)
 
 @router.patch('/settings')
 def update_settings():

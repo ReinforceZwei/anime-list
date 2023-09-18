@@ -1,6 +1,9 @@
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, Path
 from typing import Annotated
+from model.anime import AnimeCreate
 
+from dal.anime import AnimeDao
+from dependencies import anime_dao
 
 # get /anime get details
 # post /anime create new anime
@@ -15,42 +18,42 @@ from typing import Annotated
 
 router = APIRouter(prefix='/anime', tags=['anime'])
 
-@router.get('/')
-def get_anime():
+@router.post('/create')
+def create_anime(anime: AnimeCreate, anime_dao: Annotated[AnimeDao, Depends(anime_dao)]):
     pass
 
-@router.post('/')
-def create_anime():
+@router.get('/{id}')
+def get_anime(id: Annotated[int, Path()], anime_dao: Annotated[AnimeDao, Depends(anime_dao)]):
     pass
 
-@router.patch('/')
-def update_anime():
+@router.patch('/{id}')
+def update_anime(id: Annotated[int, Path()], anime_dao: Annotated[AnimeDao, Depends(anime_dao)]):
     pass
 
-@router.delete('/')
-def delete_anime():
+@router.delete('/{id}')
+def delete_anime(id: Annotated[int, Path()], anime_dao: Annotated[AnimeDao, Depends(anime_dao)]):
     pass
 
-@router.get('/tag')
-def get_tag():
+@router.get('/{id}/tag')
+def get_tag(id: Annotated[int, Path()], anime_dao: Annotated[AnimeDao, Depends(anime_dao)]):
     pass
 
-@router.patch('/tag')
-def update_tag():
+@router.patch('/{id}/tag')
+def update_tag(id: Annotated[int, Path()], anime_dao: Annotated[AnimeDao, Depends(anime_dao)]):
     pass
 
-@router.delete('/tag')
-def delete_tag():
+@router.delete('/{id}/tag')
+def delete_tag(id: Annotated[int, Path()], anime_dao: Annotated[AnimeDao, Depends(anime_dao)]):
     pass
 
-@router.get('/category')
-def get_category():
+@router.get('/{id}/category')
+def get_category(id: Annotated[int, Path()], anime_dao: Annotated[AnimeDao, Depends(anime_dao)]):
     pass
 
-@router.patch('/category')
-def update_category():
+@router.patch('/{id}/category')
+def update_category(id: Annotated[int, Path()], anime_dao: Annotated[AnimeDao, Depends(anime_dao)]):
     pass
 
-@router.delete('/category')
-def delete_category():
+@router.delete('/{id}/category')
+def delete_category(id: Annotated[int, Path()], anime_dao: Annotated[AnimeDao, Depends(anime_dao)]):
     pass

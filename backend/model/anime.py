@@ -25,3 +25,14 @@ class AnimeCreate(RequestModel):
 
 class AnimeRead(RequestModel):
     id: int
+
+class AnimeUpdate(RequestModel):
+    id: int
+    watched_time: Optional[datetime]
+    downloaded: Optional[bool]
+    watched: Optional[bool]
+    rating: Optional[int]
+    comment: Optional[str]
+    url: Optional[str]
+    remark: Optional[str]
+    tmdb_id: Optional[str]

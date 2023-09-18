@@ -5,7 +5,7 @@ from core.config import settings
 
 from router import user, anime, category, tag
 
-print(settings.dict())
+print(settings.model_dump())
 
 import database.init
 
