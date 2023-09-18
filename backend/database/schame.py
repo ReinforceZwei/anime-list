@@ -20,7 +20,7 @@ CREATE TABLE IF NOT EXISTS `anime` (
     `user_id` int(5) NOT NULL,
     `name` varchar(100) NOT NULL,
     `added_time` DATETIME NOT NULL,
-    `watched_time` DATETIME NOT NULL,
+    `watched_time` DATETIME DEFAULT NULL,
     `downloaded` BOOL NOT NULL DEFAULT FALSE,
     `watched` BOOL NOT NULL DEFAULT FALSE,
     `rating` int(3) NOT NULL DEFAULT 0,
