@@ -4,7 +4,7 @@ from typing import Annotated
 from pydantic import ValidationError
 
 from dal.user import UserDao
-from model.user import User, UserLogin, UserRead, UserSettings, UserTokenPair, UserRefresh, UserInfo
+from model.user import User, UserLogin, UserRead, UserSettings, UserTokenPair, UserRefresh, UserInfo, UserSettingsUpdate
 from dependencies import user_dao, get_current_user
 from core.utils import set_password, verify_password, generate_access_token, generate_refresh_token, decode_user_token_no_verify, decode_user_token
 from core.config import settings
@@ -17,9 +17,9 @@ from core.config import settings
 
 router = APIRouter(prefix='/user', tags=['user'])
 
-@router.get('/details/{user_id}', response_model=UserInfo)
-def get(user_id: Annotated[int, Path()], user_dao: Annotated[UserDao, Depends(user_dao)]):
-    return UserInfo.model_validate(user_dao.get(user_id).model_dump())
+@router.get('/details', response_model=UserInfo)
+def get(user: Annotated[User, Depends(get_current_user)], user_dao: Annotated[UserDao, Depends(user_dao)]):
+    return UserInfo.model_validate(user_dao.get(user.id).model_dump())
 
 @router.post('/create', response_model=UserInfo)
 def create(user: UserLogin, user_dao: Annotated[UserDao, Depends(user_dao)]):
@@ -49,7 +49,7 @@ def refresh(user: UserRefresh, user_dao: Annotated[UserDao, Depends(user_dao)]):
         jwt_payload = decode_user_token_no_verify(user.refresh_token)
         if jwt_payload['sub'] != 'refresh':
             raise error_unauthorized
-        unsafe_user = User.model_validate(jwt_payload)
+        unsafe_user = UserInfo.model_validate(jwt_payload)
         db_user = user_dao.get(unsafe_user.id)
         if db_user.name == unsafe_user.name:
             # Verify JWT using user password
@@ -61,7 +61,8 @@ def refresh(user: UserRefresh, user_dao: Annotated[UserDao, Depends(user_dao)]):
             )
     except HTTPException:
         pass
-    except ValidationError:
+    except ValidationError as e:
+        print(e)
         raise error_unauthorized
     except Exception:
         raise error_unauthorized
@@ -71,5 +72,5 @@ def get_settings(user: Annotated[User, Depends(get_current_user)], user_dao: Ann
     return user_dao.get_settings(user.id)
 
 @router.patch('/settings')
-def update_settings():
-    pass
+def update_settings(update_settings: UserSettingsUpdate, user: Annotated[User, Depends(get_current_user)], user_dao: Annotated[UserDao, Depends(user_dao)]):
+    user_dao.update_settings(user.id, update_settings)

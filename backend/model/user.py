@@ -31,6 +31,6 @@ class UserSettings(ResponseModel):
     title_unwatched: str
 
 class UserSettingsUpdate(RequestModel):
-    title: Optional[str]
-    title_watched: Optional[str]
-    title_unwatched: Optional[str]
+    title: Optional[str] = None
+    title_watched: Optional[str] = None
+    title_unwatched: Optional[str] = None

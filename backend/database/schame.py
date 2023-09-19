@@ -1,13 +1,13 @@
 user = """
 CREATE TABLE IF NOT EXISTS `user` (
-    `id` int(5) NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    `id` int NOT NULL PRIMARY KEY AUTO_INCREMENT,
     `name` varchar(100) NOT NULL UNIQUE,
     `password` text NOT NULL
 ) CHARACTER SET = utf8mb4;
 """
 user_setting = """
 CREATE TABLE IF NOT EXISTS `user_setting` (
-    `user_id` int(5) NOT NULL PRIMARY KEY,
+    `user_id` int NOT NULL PRIMARY KEY,
     `title` text NOT NULL,
     `title_watched` text NOT NULL,
     `title_unwatched` text NOT NULL,
@@ -16,8 +16,8 @@ CREATE TABLE IF NOT EXISTS `user_setting` (
 """
 anime = """
 CREATE TABLE IF NOT EXISTS `anime` (
-    `id` int(5) NOT NULL PRIMARY KEY AUTO_INCREMENT,
-    `user_id` int(5) NOT NULL,
+    `id` int NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    `user_id` int NOT NULL,
     `name` varchar(100) NOT NULL,
     `added_time` DATETIME NOT NULL,
     `watched_time` DATETIME DEFAULT NULL,
@@ -35,7 +35,7 @@ CREATE TABLE IF NOT EXISTS `anime` (
 tag = """
 CREATE TABLE IF NOT EXISTS `tag` (
     `id` int NOT NULL PRIMARY KEY AUTO_INCREMENT,
-    `user_id` int(5) NOT NULL,
+    `user_id` int NOT NULL,
     `name` varchar(100) NOT NULL,
     `color` text DEFAULT NULL,
     FOREIGN KEY(`user_id`) REFERENCES `user`(`id`) ON DELETE CASCADE,
@@ -54,7 +54,7 @@ CREATE TABLE IF NOT EXISTS `anime_tag` (
 category = """
 CREATE TABLE IF NOT EXISTS `category` (
     `id` int NOT NULL PRIMARY KEY AUTO_INCREMENT,
-    `user_id` int(5) NOT NULL,
+    `user_id` int NOT NULL,
     `name` varchar(100) NOT NULL,
     `color` text DEFAULT NULL,
     FOREIGN KEY(`user_id`) REFERENCES `user`(`id`) ON DELETE CASCADE,
