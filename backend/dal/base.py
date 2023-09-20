@@ -25,6 +25,14 @@ class CursorWrapper:
             return row_id
         else:
             raise DataNotFoundException("No last row ID available")
+    
+    @property
+    def rowcount(self):
+        count = self._cur.rowcount
+        if count > 0:
+            return count
+        else:
+            raise DataNotFoundException("No affected row count")
 
 class BaseDao:
     def __init__(self, db: PooledMySQLConnection):
@@ -34,3 +42,10 @@ class BaseDao:
     def exec(self, sql, params) -> CursorWrapper:
         self._cur.execute(sql, params)
         return CursorWrapper(self._cur)
+    
+    def row_exist(self, table_name: str, where_clause: str, params) -> bool:
+        self._cur.execute(
+            'SELECT EXISTS(SELECT * FROM `{}` WHERE {}) as is_exists'.format(table_name, where_clause),
+            params)
+        result = self._cur.fetchone()
+        return result['is_exists']

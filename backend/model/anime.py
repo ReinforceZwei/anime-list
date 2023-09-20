@@ -9,6 +9,7 @@ from .category import Category
 class Anime(DatabaseModel):
     id: int
     user_id: int
+    name: str
     added_time: datetime
     watched_time: Optional[datetime]
     downloaded: bool

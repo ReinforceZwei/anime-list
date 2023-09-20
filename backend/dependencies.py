@@ -13,6 +13,8 @@ from model.user import User, UserRead, UserTokenPair, UserInfo
 from database.connection import get_connection, PooledMySQLConnection
 from dal.user import UserDao
 from dal.anime import AnimeDao
+from dal.tag import TagDao
+from dal.anime_tag import AnimeTagDao
 from core.utils import decode_user_token_no_verify, decode_user_token
 from core.errors import DataNotFoundException
 
@@ -35,6 +37,12 @@ def user_dao(db: Annotated[PooledMySQLConnection, Depends(db_session)]):
 
 def anime_dao(db: Annotated[PooledMySQLConnection, Depends(db_session)]):
     return AnimeDao(db)
+
+def tag_dao(db: Annotated[PooledMySQLConnection, Depends(db_session)]):
+    return TagDao(db)
+
+def anime_tag_dao(db: Annotated[PooledMySQLConnection, Depends(db_session)]):
+    return AnimeTagDao(db)
 
 def get_current_user(token: Annotated[str, Depends(get_bearer)], user_dao: Annotated[UserDao, Depends(user_dao)], request: Request) -> User:
     error_unauthorized = HTTPException(401, "Unauthorized")
