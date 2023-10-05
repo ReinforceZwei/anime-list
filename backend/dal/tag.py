@@ -22,7 +22,7 @@ class TagDao(BaseDao):
     def update(self, user_id: int, id: int, tag: TagUpdate):
         tag_dict = tag.model_dump(exclude_none=True)
         sql = generate_update_sql('tag', tag_dict, 'user_id = %s AND id = %s')
-        self.exec(sql, [*tag_dict.values(), user_id, id]).rowcount
+        self.exec(sql, [*tag_dict.values(), user_id, id])
 
     def delete(self, user_id: int, id: int):
         self.exec('DELETE FROM tag WHERE user_id = %s AND id = %s', (user_id, id)).rowcount

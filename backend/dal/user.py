@@ -27,9 +27,8 @@ class UserDao(BaseDao):
         )
 
     def get_by_name(self, name: str) -> User:
-        return User.model_validate(
-            self.exec('SELECT * FROM user WHERE name = %s', (name,)).fetchone()
-        )
+        user = self.exec('SELECT * FROM user WHERE name = %s', (name,)).fetchone(raise_exception=False)
+        return User.model_validate(user) if user is not None else None
     
     def get_settings(self, user_id: int) -> UserSettings:
         return UserSettings.model_validate(
@@ -39,4 +38,4 @@ class UserDao(BaseDao):
     def update_settings(self, user_id: int, settings: UserSettingsUpdate):
         settings_dict = settings.model_dump(exclude_none=True)
         sql = generate_update_sql('user_setting', settings_dict, 'user_id = %s')
-        self.exec(sql, [*settings_dict.values(), user_id]).rowcount
+        self.exec(sql, [*settings_dict.values(), user_id])

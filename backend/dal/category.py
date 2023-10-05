@@ -22,7 +22,7 @@ class CategoryDao(BaseDao):
     def update(self, user_id: int, id: int, category: CategoryUpdate):
         category_dict = category.model_dump(exclude_none=True)
         sql = generate_update_sql('category', category_dict, 'user_id = %s AND id = %s')
-        self.exec(sql, [*category_dict.values(), user_id, id]).rowcount
+        self.exec(sql, [*category_dict.values(), user_id, id])
 
     def delete(self, user_id: int, id: int):
         self.exec('DELETE FROM category WHERE user_id = %s AND id = %s', (user_id, id)).rowcount

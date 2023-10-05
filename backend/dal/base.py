@@ -7,12 +7,15 @@ class CursorWrapper:
     def __init__(self, cursor: MySQLCursorDict):
         self._cur = cursor
     
-    def fetchone(self):
+    def fetchone(self, raise_exception=True):
         result = self._cur.fetchone()
         if result is not None:
             return result
         else:
-            raise DataNotFoundException("No data found")
+            if raise_exception:
+                raise DataNotFoundException("No data found")
+            else:
+                return None
     
     def fetchall(self):
         result = self._cur.fetchall()

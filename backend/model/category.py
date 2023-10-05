@@ -10,3 +10,7 @@ class Category(DatabaseModel):
 class CategoryUpdate(RequestModel):
     name: Optional[str] = None
     color: Optional[str] = None
+
+class CategoryCreate(RequestModel):
+    name: str
+    color: Optional[str] = None

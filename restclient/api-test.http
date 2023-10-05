@@ -1,0 +1,47 @@
+@api = http://localhost:8000/api
+@token = eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6MSwibmFtZSI6InJlaW5mb3JjZSIsInN1YiI6ImFjY2VzcyIsImlhdCI6MTY5NjQ5MDkzMCwiZXhwIjoxNjk2NzUwMTMwfQ.7CngEZ-UwI0nE2LVRprg71UcaG8kIJgmHnFsJRMy1Lo
+
+
+@auth = Authorization: bearer {{token}}
+@json = Content-Type: application/json
+
+
+### User
+GET {{api}}/user/details
+{{auth}}
+
+### Create User
+POST {{api}}/user/create
+{{json}}
+
+{
+    "name": "",
+    "password": ""
+}
+
+### Login
+POST {{api}}//user/login
+{{json}}
+
+{
+    "name": "",
+    "password": ""
+}
+
+### Settings
+GET {{api}}/user/settings
+{{auth}}
+
+### Settings
+PATCH {{api}}/user/settings
+{{auth}}
+
+{
+  "title": "My cool list 2",
+  "title_watched": "已看",
+  "title_unwatched": "想看"
+}
+
+### Anime
+GET {{api}}/anime/all
+{{auth}}

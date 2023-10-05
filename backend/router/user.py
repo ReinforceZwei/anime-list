@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, HTTPException, Path
+from fastapi import APIRouter, Depends, HTTPException, Path, Response
 from typing import Annotated
 
 from pydantic import ValidationError
@@ -41,7 +41,7 @@ def login(user: UserLogin, user_dao: Annotated[UserDao, Depends(user_dao)]):
     else:
         raise HTTPException(401, "Incorrect user")
 
-@router.post('/refresh')
+@router.post('/refresh', response_model=UserTokenPair)
 def refresh(user: UserRefresh, user_dao: Annotated[UserDao, Depends(user_dao)]):
     error_unauthorized = HTTPException(401, "Unauthorized")
     try:
@@ -71,6 +71,6 @@ def refresh(user: UserRefresh, user_dao: Annotated[UserDao, Depends(user_dao)]):
 def get_settings(user: Annotated[User, Depends(get_current_user)], user_dao: Annotated[UserDao, Depends(user_dao)]):
     return user_dao.get_settings(user.id)
 
-@router.patch('/settings')
+@router.patch('/settings', response_class=Response)
 def update_settings(update_settings: UserSettingsUpdate, user: Annotated[User, Depends(get_current_user)], user_dao: Annotated[UserDao, Depends(user_dao)]):
     user_dao.update_settings(user.id, update_settings)

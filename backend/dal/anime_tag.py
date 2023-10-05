@@ -16,6 +16,10 @@ class AnimeTagDao(BaseDao):
         result = [Tag.model_validate(tag) for tag in tags]
         return result
     
+    def get_all_link(self, user_id: int):
+        sql = 'SELECT * FROM anime_tag WHERE user_id = %s'
+        return self.exec(sql, (user_id,)).fetchall()
+    
     def create_link(self, user_id: int, tag_id: int, anime_id: int):
         sql = 'INSERT INTO anime_tag VALUES (%s, %s, %s)'
         self.exec(sql, (user_id, tag_id, anime_id)).rowcount

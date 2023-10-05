@@ -19,8 +19,8 @@ class Anime(DatabaseModel):
     url: Optional[str]
     remark: Optional[str]
     tmdb_id: Optional[str]
-    tags: Optional[List[Tag]] = Field(default_factory=list)
-    category: Optional[List[Category]] = Field(default_factory=list)
+    tags: Optional[List[int]] = Field(default_factory=list)
+    category: Optional[List[int]] = Field(default_factory=list)
 
 class AnimeCreate(RequestModel):
     name: str
