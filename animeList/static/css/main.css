@@ -158,6 +158,8 @@ td {
     border-radius: 5px;
     font-size: 16px;
     background-color: var(--edit-background);
+    overflow-y: auto;
+    max-height: 90vh;
 }
 #editPanel input,textarea{
     width: 100%;
